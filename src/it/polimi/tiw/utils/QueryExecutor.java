@@ -1,4 +1,4 @@
-package it.polimi.tiw.dao;
+package it.polimi.tiw.utils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class QueryExecutor {
 
@@ -20,22 +21,19 @@ public class QueryExecutor {
         this.con = connection;
     }
 
-    public static void main(String[] args) throws IllegalAccessException {
-
-        Test test = new Test();
-        test.setIda1("a1");
-        test.setA2("ad");
-        QueryExecutor queryExecutor = new QueryExecutor(null);
-        System.out.println(queryExecutor.buildUpdateQuery("table", test));
-    }
 
     public <O> List<O> select(String query, Map<String, String> param, Class<O> clazz) throws SQLException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        AtomicReference<String> finalQuery = new AtomicReference<>(query);
         List<O> extractedEntities = new ArrayList<>();
 
         if (param.keySet().stream().filter(key -> query.contains(":" + key)).count() != param.size())
             throw new SQLException("No exact match between the provided parameters and query");
 
-        try (PreparedStatement preparedStatement = con.prepareStatement(query);
+        finalQuery.set(query);
+        param.forEach((name, value) -> finalQuery.set(finalQuery.get().replace(":" + name, "'" + value + "'")));
+
+        System.out.println(finalQuery.get());
+        try (PreparedStatement preparedStatement = con.prepareStatement(finalQuery.get());
              ResultSet result = preparedStatement.executeQuery()) {
 
             while (result.next()) {
@@ -54,14 +52,14 @@ public class QueryExecutor {
                 extractedEntities.add(record);
             }
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return extractedEntities;
     }
 
-    public <I> boolean insert(String tableName, I entity) throws SQLException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    public <I> boolean insert(String tableName, I entity){
 
         List<Field> fields = extractObjectFields(entity);
         String query = buildInsertQuery(tableName, fields);
@@ -113,7 +111,7 @@ public class QueryExecutor {
         return false;
     }
 
-    public <I> String buildInsertQuery(String tableName, List<Field> fields) {
+    private <I> String buildInsertQuery(String tableName, List<Field> fields) {
 
         StringBuffer sb = new StringBuffer("INSERT INTO ");
         sb.append(tableName).append(" (");
@@ -130,7 +128,7 @@ public class QueryExecutor {
         return sb.toString();
     }
 
-    public <I> String buildUpdateQuery(String tableName, I newRecord) throws IllegalAccessException {
+    private <I> String buildUpdateQuery(String tableName, I newRecord) throws IllegalAccessException {
 
         List<Field> fields = extractObjectFields(newRecord);
         StringBuffer sb = new StringBuffer("UPDATE ");
@@ -156,7 +154,7 @@ public class QueryExecutor {
 
     private <I> Field extractIdField(I entity) {
         return Arrays.stream(entity.getClass().getDeclaredFields()).
-                filter(field -> field.getName().toLowerCase().contains("id")).findFirst().orElseThrow();
+                filter(field -> field.getName().toLowerCase().contains("id")).findFirst().get();
     }
 
     private List<Field> extractObjectFields(Object o) {
