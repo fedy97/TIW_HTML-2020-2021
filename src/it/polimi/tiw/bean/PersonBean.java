@@ -8,6 +8,7 @@ public class PersonBean {
 
     public PersonBean(){}
 
+
     public PersonBean(String idperson, String name, String lastname, String city) {
         this.idperson = idperson;
         this.name = name;
