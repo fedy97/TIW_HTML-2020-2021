@@ -1,0 +1,13 @@
+
+--> creazione Bean applicativi (User, Articolo, Ordine, Fornitore etc...)
+
+--> POST servizio autenticazione /login
+--> GET servizio che restituisce lista degli ultimi cinque prodotti visualizzati dall’utente / prodotti in offerta
+--> GET servizio di ricerca 
+	--> input keyword
+	--> output lista articoli
+--> GET /article/article-id (restituisce dettagli articolo, inclusa lista fornitori, con id specifico e flag visualizzato) TDB
+--> POST Salvataggio articoli carrello (gestito da thymeleaf)
+--> POST servizio creazione ordine
+--> GET /orders (restituisce dettagli ordini per data decrescente degli ordini con tutti i dati associati)
+--> GET /order/order-id
