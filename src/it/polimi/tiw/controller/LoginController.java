@@ -42,6 +42,7 @@ public class LoginController extends HttpServlet {
         super();
     }
 
+    @Override
     public void init() throws ServletException {
 
         connection = ConnectionHandler.getConnection(getServletContext());
@@ -53,6 +54,7 @@ public class LoginController extends HttpServlet {
         templateResolver.setSuffix(".html");
     }
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         String usrn;
@@ -73,13 +75,13 @@ public class LoginController extends HttpServlet {
 
         try {
             Optional<User> user = getUserEntity(usrn, pwd);
-            if (user.isPresent()) {
+            if (!user.isPresent()) {
                 ServletContext servletContext = getServletContext();
                 final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
                 ctx.setVariable("errorMsg", "Incorrect username or password");
                 templateEngine.process(LOGIN_PAGE_PATH, ctx, response.getWriter());
             } else {
-                request.getSession().setAttribute(USER_SESSION_ATTRIBUTE, user);
+                request.getSession().setAttribute(USER_SESSION_ATTRIBUTE, user.get());
                 response.sendRedirect(getServletContext().getContextPath() + HOME_PAGE_PATH);
             }
         } catch (SQLException e) {
@@ -93,6 +95,7 @@ public class LoginController extends HttpServlet {
         return userDao.checkCredentials(usrn, pwd);
     }
 
+    @Override
     public void destroy() {
 
         try {
