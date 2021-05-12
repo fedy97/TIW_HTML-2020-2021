@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -26,6 +28,8 @@ import it.polimi.tiw.utils.ConnectionHandler;
 
 @WebServlet("/login")
 public class LoginController extends HttpServlet {
+
+    private static final Logger log                    = LoggerFactory.getLogger(LoginController.class.getSimpleName());
 
     private static final String USER_SESSION_ATTRIBUTE = "user";
     private static final String USER_PARAM             = "username";
@@ -68,7 +72,7 @@ public class LoginController extends HttpServlet {
             }
 
         } catch (Exception e) {
-            // for debugging only e.printStackTrace();
+            log.error("Something went wrong when extracting login form parameters. Cause is {}", e.getMessage());
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing credential value");
             return;
         }
@@ -85,6 +89,7 @@ public class LoginController extends HttpServlet {
                 response.sendRedirect(getServletContext().getContextPath() + HOME_PAGE_PATH);
             }
         } catch (SQLException e) {
+            log.error("Something went wrong when extracting user data. Cause is {}", e.getMessage());
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not Possible to check credentials");
         }
     }
