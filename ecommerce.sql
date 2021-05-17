@@ -41,6 +41,7 @@ CREATE TABLE `article` (
 LOCK TABLES `article` WRITE;
 /*!40000 ALTER TABLE `article` DISABLE KEYS */;
 /*!40000 ALTER TABLE `article` ENABLE KEYS */;
+INSERT INTO `article` VALUES (1,'art1', 'descr1', 'cat1', 'photo1'),(2,'art2', 'descr2', 'cat2', 'photo2');
 UNLOCK TABLES;
 
 --
@@ -71,6 +72,8 @@ CREATE TABLE `order` (
 LOCK TABLES `order` WRITE;
 /*!40000 ALTER TABLE `order` DISABLE KEYS */;
 /*!40000 ALTER TABLE `order` ENABLE KEYS */;
+INSERT INTO `order` VALUES (1,10,1,20,'2020-01-02'),(2,11,2,30,'2021-03-04');
+
 UNLOCK TABLES;
 
 --
@@ -98,6 +101,7 @@ CREATE TABLE `order_article` (
 LOCK TABLES `order_article` WRITE;
 /*!40000 ALTER TABLE `order_article` DISABLE KEYS */;
 /*!40000 ALTER TABLE `order_article` ENABLE KEYS */;
+INSERT INTO `order_article` VALUES (1,2,3),(1,1,2),(2,1,2);
 UNLOCK TABLES;
 
 --
@@ -122,6 +126,7 @@ CREATE TABLE `seller` (
 LOCK TABLES `seller` WRITE;
 /*!40000 ALTER TABLE `seller` DISABLE KEYS */;
 /*!40000 ALTER TABLE `seller` ENABLE KEYS */;
+INSERT INTO `seller` VALUES (1,'seller1', 3.0),(2,'seller2', 4.0);
 UNLOCK TABLES;
 
 --
@@ -204,6 +209,7 @@ CREATE TABLE `user` (
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
+INSERT INTO `user` VALUES (1,'name1', 'surname1','email1','1234','via lol 1'),(2,'name2', 'surname2','email2','1234','via lol 2');
 UNLOCK TABLES;
 
 --
