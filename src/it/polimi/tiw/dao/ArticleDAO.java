@@ -23,9 +23,9 @@ public class ArticleDAO {
     public List<ArticleBean> findArticleByKeyword(String keyword) throws SQLException, InvocationTargetException,
             NoSuchMethodException, InstantiationException, IllegalAccessException {
 
-        String query = "SELECT * FROM articles WHERE name like '%:keyword%' or description like '%:keyword%'";
+        String query = "SELECT * FROM article WHERE name like :keyword or description like :keyword";
         Map<String, String> queryParam = new HashMap<>();
-        queryParam.put("keyword", keyword);
+        queryParam.put("keyword", "%" + keyword + "%");
         return queryExecutor.select(query, queryParam, ArticleBean.class);
     }
 

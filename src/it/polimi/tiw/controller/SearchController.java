@@ -73,6 +73,7 @@ public class SearchController extends HttpServlet {
         }
 
         try {
+            log.debug("Search keyword {}", keyword);
             List<ArticleBean> foundArticles = getSearchedArticles(keyword);
             ServletContext servletContext = getServletContext();
             final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
