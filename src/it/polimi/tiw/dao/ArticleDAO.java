@@ -29,4 +29,13 @@ public class ArticleDAO {
         return queryExecutor.select(query, queryParam, ArticleBean.class);
     }
 
+    public List<ArticleBean> findArticleByViews(String userId) throws SQLException, InvocationTargetException,
+            NoSuchMethodException, InstantiationException, IllegalAccessException {
+
+        String query = "SELECT * FROM article a LEFT OUTER JOIN user_article u_a ON a.id=u_a.article_id  WHERE u_a.user_id = :userid";
+        Map<String, String> queryParam = new HashMap<>();
+        queryParam.put("userid", userId);
+        return queryExecutor.select(query, queryParam, ArticleBean.class);
+    }
+
 }

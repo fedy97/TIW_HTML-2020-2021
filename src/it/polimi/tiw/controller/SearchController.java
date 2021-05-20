@@ -92,6 +92,8 @@ public class SearchController extends HttpServlet {
             InstantiationException, NoSuchMethodException, InvocationTargetException {
 
         ArticleDAO articleDAO = new ArticleDAO(connection);
+        List<ArticleBean> bean = articleDAO.findArticleByViews("1");
+        log.debug("FOUND {}", bean.get(0).toString());
         return articleDAO.findArticleByKeyword(keyword);
     }
 

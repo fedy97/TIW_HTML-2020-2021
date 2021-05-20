@@ -58,4 +58,11 @@ public class ArticleBean {
 
         this.photo = photo;
     }
+
+    @Override
+    public String toString() {
+
+        return "ArticleBean{" + "id='" + id + '\'' + ", name='" + name + '\'' + ", description='" + description + '\''
+                + ", category='" + category + '\'' + ", photo='" + photo + '\'' + '}';
+    }
 }
