@@ -29,10 +29,16 @@ public class ArticleDAO {
 
     public List<ArticleBean> findArticleByViews(String userId) throws SQLException {
 
-        String query = "SELECT * FROM article a LEFT OUTER JOIN user_article u_a ON a.id=u_a.article_id  WHERE u_a.user_id = :userid LIMIT 5";
+        String query = "SELECT * FROM article a LEFT OUTER JOIN user_article u_a ON a.id=u_a.article_id  WHERE u_a.user_id = :userid ORDER BY view_ts DESC LIMIT 5";
         Map<String, String> queryParam = new HashMap<>();
         queryParam.put("userid", userId);
         return queryExecutor.select(query, queryParam, ArticleBean.class);
+    }
+
+    public List<ArticleBean> findLastArticles(Integer articlesNumber) throws SQLException {
+
+        String query = "SELECT * FROM article ORDER BY insr_ts DESC LIMIT " + articlesNumber;
+        return queryExecutor.select(query, new HashMap<>(), ArticleBean.class);
     }
 
 }
