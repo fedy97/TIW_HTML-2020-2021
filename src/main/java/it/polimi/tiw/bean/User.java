@@ -9,7 +9,7 @@ public class User implements Serializable {
 	private String name;
 	private String surname;
 	private String psw_hash;
-	private String  shipment_addr;
+	private String shipment_addr;
 
 	public String getId() {
 		return id;

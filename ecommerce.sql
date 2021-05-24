@@ -72,7 +72,7 @@ CREATE TABLE `order` (
 LOCK TABLES `order` WRITE;
 /*!40000 ALTER TABLE `order` DISABLE KEYS */;
 /*!40000 ALTER TABLE `order` ENABLE KEYS */;
-INSERT INTO `order` VALUES (1,10,1,20,'2020-01-02'),(2,11,2,30,'2021-03-04');
+INSERT INTO `order` VALUES (1,1,1,20,'2020-01-02'),(2,2,2,30,'2021-03-04');
 
 UNLOCK TABLES;
 
@@ -113,8 +113,8 @@ DROP TABLE IF EXISTS `seller`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seller` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  `rating` float NOT NULL,
+  `seller_name` varchar(45) NOT NULL,
+  `seller_rating` float NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
