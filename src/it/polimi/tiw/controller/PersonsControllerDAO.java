@@ -1,30 +1,31 @@
+
 package it.polimi.tiw.controller;
 
-import it.polimi.tiw.bean.PersonBean;
-import it.polimi.tiw.dao.PersonDAO;
-
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.UnavailableException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Logger;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import it.polimi.tiw.bean.PersonBean;
+import it.polimi.tiw.dao.PersonDAO;
 
 @WebServlet("/PersonsControllerDAO")
 public class PersonsControllerDAO extends HttpServlet {
-    private static final long serialVersionUID = 1L;
-    private Connection connection = null;
 
-    public void init() throws ServletException {
+    private static final long serialVersionUID = 1L;
+    private Connection        connection       = null;
+
+    public void init()  {
+
         try {
             ServletContext context = getServletContext();
             String driver = context.getInitParameter("dbDriver");
@@ -34,7 +35,7 @@ public class PersonsControllerDAO extends HttpServlet {
             Class.forName(driver);
             connection = DriverManager.getConnection(url, user, password);
 
-        } catch (Exception e ){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -54,13 +55,14 @@ public class PersonsControllerDAO extends HttpServlet {
             dispatcher.forward(req, res);
         } catch (
 
-                Exception e) {
+        Exception e) {
             e.printStackTrace();
             res.sendError(500, "Database access failed");
         }
     }
 
     public void destroy() {
+
         try {
             if (connection != null) {
                 connection.close();

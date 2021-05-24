@@ -2,14 +2,12 @@
 package it.polimi.tiw.controller;
 
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Optional;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,45 +15,25 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
-import org.thymeleaf.templatemode.TemplateMode;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import it.polimi.tiw.bean.User;
 import it.polimi.tiw.dao.UserDAO;
-import it.polimi.tiw.utils.ConnectionHandler;
+import it.polimi.tiw.utils.GenericServlet;
 
 @WebServlet("/login")
-public class LoginController extends HttpServlet {
+public class LoginController extends GenericServlet {
 
     private static final Logger log                    = LoggerFactory.getLogger(LoginController.class.getSimpleName());
 
-    private static final String USER_SESSION_ATTRIBUTE = "user";
     private static final String USER_PARAM             = "username";
     private static final String PWD_PARAM              = "pwd";
-    private static final String LOGIN_PAGE_PATH        = "/login.html";
-    private static final String HOME_PAGE_PATH         = "/home.html";
 
     private static final long   serialVersionUID       = 1L;
-    private Connection          connection             = null;
-    private TemplateEngine      templateEngine;
 
     public LoginController() {
 
         super();
-    }
-
-    @Override
-    public void init() throws ServletException {
-
-        connection = ConnectionHandler.getConnection(getServletContext());
-        ServletContext servletContext = getServletContext();
-        ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
-        templateResolver.setTemplateMode(TemplateMode.HTML);
-        this.templateEngine = new TemplateEngine();
-        this.templateEngine.setTemplateResolver(templateResolver);
-        templateResolver.setSuffix(".html");
     }
 
     @Override
@@ -100,13 +78,4 @@ public class LoginController extends HttpServlet {
         return userDao.checkCredentials(usrn, pwd);
     }
 
-    @Override
-    public void destroy() {
-
-        try {
-            ConnectionHandler.closeConnection(connection);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 }
