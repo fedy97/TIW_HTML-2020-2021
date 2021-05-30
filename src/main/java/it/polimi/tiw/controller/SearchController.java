@@ -43,11 +43,11 @@ public class SearchController extends GenericServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-        Optional<User> user = getUserData(req);
-        if (!user.isPresent()) {
-            resp.sendRedirect(getServletContext().getContextPath() + LOGIN_PAGE_PATH);
-            return;
-        }
+//        Optional<User> user = getUserData(req);
+//        if (!user.isPresent()) {
+//            resp.sendRedirect(getServletContext().getContextPath() + LOGIN_PAGE_PATH);
+//            return;
+//        }
 
         String keyword;
         try {
