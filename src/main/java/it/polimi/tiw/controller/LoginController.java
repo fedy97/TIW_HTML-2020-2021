@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,12 +23,12 @@ import it.polimi.tiw.utils.GenericServlet;
 @WebServlet("/login")
 public class LoginController extends GenericServlet {
 
-    private static final Logger log                    = LoggerFactory.getLogger(LoginController.class.getSimpleName());
+    private static final Logger log              = LoggerFactory.getLogger(LoginController.class.getSimpleName());
 
-    private static final String USER_PARAM             = "username";
-    private static final String PWD_PARAM              = "pwd";
+    private static final String USER_PARAM       = "username";
+    private static final String PWD_PARAM        = "pwd";
 
-    private static final long   serialVersionUID       = 1L;
+    private static final long   serialVersionUID = 1L;
 
     public LoginController() {
 

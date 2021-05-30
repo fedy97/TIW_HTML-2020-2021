@@ -21,7 +21,7 @@ public class OrderDAO {
     }
 
     public List<OrderBean> findOrderById(String orderId) throws SQLException {
-        var query =
+        String query =
                 "SELECT O.id, O.seller_id, O.total, O.shipment_date, O.user_id, S.seller_name, S.seller_rating, U.name, U.surname, U.email, U.shipment_addr " +
                         "FROM ecommerce.order O LEFT JOIN ecommerce.seller S " +
                         "on O.seller_id = S.id " +
@@ -38,7 +38,7 @@ public class OrderDAO {
     }
 
     private List<ArticleBean> findArticlesByOrderId(String orderId) throws SQLException {
-        var query = "SELECT a_o.article_id, a_o.quantity " +
+        String query = "SELECT a_o.article_id, a_o.quantity " +
                 "FROM ecommerce.order_article a_o " +
                 "where a_o.order_id = :orderId";
         Map<String, String> queryParam = new HashMap<>();
