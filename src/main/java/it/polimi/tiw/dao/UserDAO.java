@@ -22,7 +22,7 @@ public class UserDAO {
 
     public Optional<User> checkCredentials(String usrn, String pwd) throws SQLException {
 
-        String query = "SELECT  id, email, name, surname FROM user  WHERE username = :usrn AND psw_hash =:pwd";
+        String query = "SELECT  id, email, name, surname FROM user  WHERE email = :usrn AND psw_hash =:pwd";
 
         Map<String, String> queryParam = new HashMap<>();
         queryParam.put("usrn", usrn);
