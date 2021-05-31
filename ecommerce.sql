@@ -57,6 +57,7 @@ CREATE TABLE `order` (
   `user_id` int(11) NOT NULL,
   `total` float NOT NULL,
   `shipment_date` datetime NOT NULL,
+  `order_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_user_id_idx` (`user_id`),
   KEY `fk_seller_id_idx` (`seller_id`),
@@ -72,7 +73,7 @@ CREATE TABLE `order` (
 LOCK TABLES `order` WRITE;
 /*!40000 ALTER TABLE `order` DISABLE KEYS */;
 /*!40000 ALTER TABLE `order` ENABLE KEYS */;
-INSERT INTO `order` VALUES (1,1,1,20,'2020-01-02'),(2,2,2,30,'2021-03-04');
+INSERT INTO `order` VALUES (1,1,1,20,'2020-01-02','2020-01-01'),(2,2,1,30,'2021-03-04','2021-03-02');
 
 UNLOCK TABLES;
 

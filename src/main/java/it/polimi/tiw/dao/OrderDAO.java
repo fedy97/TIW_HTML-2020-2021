@@ -7,6 +7,7 @@ import it.polimi.tiw.utils.QueryExecutor;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,7 @@ public class OrderDAO {
 
     public List<OrderBean> findOrderById(String orderId) throws SQLException {
         String query =
-                "SELECT O.id, O.seller_id, O.total, O.shipment_date, O.user_id, S.seller_name, S.seller_rating, U.name, U.surname, U.email, U.shipment_addr " +
+                "SELECT O.id, O.seller_id, O.total, O.shipment_date, O.order_date, O.user_id, S.seller_name, S.seller_rating, U.name, U.surname, U.email, U.shipment_addr " +
                         "FROM ecommerce.order O LEFT JOIN ecommerce.seller S " +
                         "on O.seller_id = S.id " +
                         "LEFT JOIN ecommerce.user U " +
@@ -32,15 +33,32 @@ public class OrderDAO {
         queryParam.put("orderId", orderId);
         List<OrderBean> result = queryExecutor.select(query, queryParam, OrderBean.class);
         if (result.isEmpty())
-            return null;
+            return new ArrayList<>();
         result.get(0).setArticleBeans(findArticlesByOrderId(orderId));
         return result;
     }
 
+    public List<OrderBean> findOrders(String userId) throws SQLException {
+        String query = "SELECT O.id, O.seller_id, O.total, O.shipment_date, O.order_date, O.user_id, S.seller_name, S.seller_rating, U.name, U.surname, U.email, U.shipment_addr " +
+                "FROM ecommerce.order O LEFT JOIN ecommerce.seller S " +
+                "on O.seller_id = S.id " +
+                "LEFT JOIN ecommerce.user U " +
+                "on O.user_id = U.id " +
+                "where O.user_id = :userId " +
+                "ORDER BY O.order_date DESC";
+        Map<String, String> queryParam = new HashMap<>();
+        queryParam.put("userId", userId);
+        List<OrderBean> result = queryExecutor.select(query, queryParam, OrderBean.class);
+        for (OrderBean orderBean : result)
+            orderBean.setArticleBeans(findArticlesByOrderId(orderBean.getId()));
+        return result;
+    }
+
     private List<ArticleBean> findArticlesByOrderId(String orderId) throws SQLException {
-        String query = "SELECT a_o.article_id, a_o.quantity " +
-                "FROM ecommerce.order_article a_o " +
-                "where a_o.order_id = :orderId";
+        String query = "SELECT A.id, A.name, A.description, A.category, A.photo, A_O.quantity " +
+                "FROM ecommerce.article A LEFT JOIN ecommerce.order_article A_O " +
+                "on A.id = A_O.article_id " +
+                "where A_O.order_id = :orderId";
         Map<String, String> queryParam = new HashMap<>();
         queryParam.put("orderId", orderId);
         return queryExecutor.select(query, queryParam, ArticleBean.class);
