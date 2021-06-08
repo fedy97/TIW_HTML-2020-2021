@@ -42,31 +42,40 @@ public class OrderController extends GenericServlet {
 
         String userId = user.get().getId();
 
-
         try {
             orderId = req.getParameter("order-id");
         } catch (NumberFormatException | NullPointerException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect param values");
             return;
         }
-
         try {
-            List<OrderBean> foundOrder = getOrder(orderId);
-            // check if the order exists
-            if (foundOrder == null) {
-                resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Order not found");
-                return;
-            }
-            // check if the order belongs to the logged user
-            if (!foundOrder.get(0).getUser_id().equals(userId)) {
-                resp.sendError(HttpServletResponse.SC_FORBIDDEN, "You cannot view this order");
-                return;
-            }
+            if (orderId != null) {
+                // get order by id
+                List<OrderBean> foundOrder = getOrder(orderId);
+                // check if the order exists
+                if (foundOrder.isEmpty()) {
+                    resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Order not found");
+                    return;
+                }
+                // check if the order belongs to the logged user
+                if (!foundOrder.get(0).getUser_id().equals(userId)) {
+                    resp.sendError(HttpServletResponse.SC_FORBIDDEN, "You cannot view this order");
+                    return;
+                }
 
-            ServletContext servletContext = getServletContext();
-            final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
-            ctx.setVariable("foundOrder", foundOrder.get(0));
-            templateEngine.process(RESULTS_PAGE_PATH, ctx, resp.getWriter());
+                ServletContext servletContext = getServletContext();
+                final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
+                ctx.setVariable("foundOrder", foundOrder.get(0));
+                templateEngine.process(RESULTS_PAGE_PATH, ctx, resp.getWriter());
+            }
+            else {
+                // get orders
+                List<OrderBean> foundOrders = getOrders(userId);
+                ServletContext servletContext = getServletContext();
+                final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
+                ctx.setVariable("foundOrders", foundOrders);
+                templateEngine.process(RESULTS_PAGE_PATH, ctx, resp.getWriter());
+            }
         } catch (Exception e) {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     e.getMessage());
@@ -75,8 +84,12 @@ public class OrderController extends GenericServlet {
     }
 
     private List<OrderBean> getOrder(String id) throws SQLException {
-
         OrderDAO orderDAO = new OrderDAO(connection);
         return orderDAO.findOrderById(id);
+    }
+
+    private List<OrderBean> getOrders(String userId) throws SQLException {
+        OrderDAO orderDAO = new OrderDAO(connection);
+        return orderDAO.findOrders(userId);
     }
 }

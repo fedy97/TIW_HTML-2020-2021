@@ -16,6 +16,7 @@ public class OrderBean implements Serializable {
     private String surname;
     private String email;
     private String shipment_addr;
+    private String order_date;
     private List<ArticleBean> articleBeans;
 
     public String getId() {
@@ -106,6 +107,14 @@ public class OrderBean implements Serializable {
         this.shipment_addr = shipment_addr;
     }
 
+    public String getOrder_date() {
+        return order_date;
+    }
+
+    public void setOrder_date(String order_date) {
+        this.order_date = order_date;
+    }
+
     public List<ArticleBean> getArticleBeans() {
         return articleBeans;
     }
@@ -128,7 +137,8 @@ public class OrderBean implements Serializable {
                 ", surname='" + surname + '\'' +
                 ", email='" + email + '\'' +
                 ", shipment_addr='" + shipment_addr + '\'' +
-                ", articleBeans=" + articleBeans.size() +
+                ", order_date='" + order_date + '\'' +
+                ", articleBeans=" + articleBeans +
                 '}';
     }
 }
