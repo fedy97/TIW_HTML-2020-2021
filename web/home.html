@@ -7,50 +7,42 @@
           href="../CSS/mystyle.css" th:href="@{/css/mystyle.css}"/>
 </head>
 <body>
-<div align="right">
-    <a th:href="@{/Logout}">Logout</a>
-</div>
-<h1>Welcome to the Mission Mamagement Home Page</h1>
-<p th:text="${'Nice to see you again ' + session.user.name + ' ' + session.user.surname}"></p>
+    <div align="right">
+        <a th:href="@{/logout}">Logout</a>
+    </div>
+    <h1>Welcome to the Mission Mamagement Home Page</h1>
+    <p th:text="${'Nice to see you again ' + session.user.name + ' ' + session.user.surname}"></p>
 
-<table>
-    <thead>
-    <tr>
-        <th>Destination</th>
-        <th>Date</th>
-        <th>Link</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="m : ${missions}">
-        <td th:text="${m.destination}"></td>
-        <td th:text="${ m.startDate }"></td>
-        <td><a th:href="@{/GetMissionDetails(missionid=${m.id})}">Details</a></td>
-    </tr>
-    </tbody>
-</table>
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="article : ${lastArticles}">
+            <td th:text="${article.getName()}"></td>
+            <td th:text="${article.getDescription() }"></td>
+            <td th:text="${article.getCategory()}"></td>
+            <td><img th:src=" ${article.getPhoto()}"></td>
+            <!-- <td><a th:href="@{/GetMissionDetails(missionid=${m.id})}">Details</a></td>-->
+        </tr>
+        </tbody>
+    </table>
 
-<div>
-    <p>Complete the form to create a mission</p>
-    <form action="#" th:action="@{/CreateMission}" method="POST">
-        <fieldset>
-            <p>
-                Destination: <input type="text" name="destination" required/>
-            </p>
-            <p>
-                Description: <input type="text" name="description" required/>
-            </p>
-            <p>
-                Start Day: <input type="date" name="date"
-                                  th:attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"
-                                  placeholder="yyyy-mm-dd" required/>
-            </p>
-            <p>
-                Duration (in days): <input type="number" name="days" min=0 required/>
-            </p>
-            <input type="submit" name="Create Mission">
-        </fieldset>
-    </form>
-</div>
+    <div>
+        <p>Search an article</p>
+        <form action="#" th:action="@{/search}" method="GET">
+            <fieldset>
+                <p>
+                    <input type="text" name="hint" required/>
+                </p>
+                <input type="submit" name="Search">
+            </fieldset>
+        </form>
+    </div>
 </body>
 </html>

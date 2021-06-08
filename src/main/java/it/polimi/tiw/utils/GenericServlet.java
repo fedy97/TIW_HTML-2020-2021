@@ -22,7 +22,10 @@ public class GenericServlet extends HttpServlet {
 
     protected static final String USER_SESSION_ATTRIBUTE = "user";
     protected static final String LOGIN_PAGE_PATH        = "/login.html";
-    protected static final String HOME_PAGE_PATH         = "/home.html";
+    protected static final String HOME_PAGE_PATH         = "/home";
+    protected static final String CART_PATH              = "/cart";
+
+    protected static final String CART_SESSION_VAR       = "cart";
 
     private static final long     serialVersionUID       = 1L;
     protected Connection          connection             = null;

@@ -20,19 +20,19 @@ import it.polimi.tiw.bean.User;
 import it.polimi.tiw.dao.ArticleDAO;
 import it.polimi.tiw.utils.GenericServlet;
 
-@WebServlet("/article")
-public class ArticleController extends GenericServlet {
+@WebServlet("/home")
+public class HomeController extends GenericServlet {
 
-    private static final Logger  log                = LoggerFactory.getLogger(ArticleController.class.getSimpleName());
+    private static final Logger  log                 = LoggerFactory.getLogger(HomeController.class.getSimpleName());
 
-    private static final String  RESULT_CONTEXT_VAR = "lastArticles";
-    private static final String  RESULTS_PAGE_PATH  = "/results.html";
+    private static final String  RESULT_CONTEXT_VAR  = "lastArticles";
+    private static final String  RESULTS_PAGE_PATH   = "/home.html";
 
-    private static final Integer MAX_PAGE_ARTICLES  = 5;
+    private static final Integer MAX_PAGE_ARTICLES   = 5;
 
-    private static final long    serialVersionUID   = 1L;
+    private static final long    serialVersionUID    = 1L;
 
-    public ArticleController() {
+    public HomeController() {
 
         super();
     }
