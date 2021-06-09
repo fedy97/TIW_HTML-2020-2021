@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import it.polimi.tiw.bean.ArticleBean;
 import it.polimi.tiw.utils.QueryExecutor;
@@ -17,6 +18,17 @@ public class ArticleDAO {
     public ArticleDAO(Connection connection) {
 
         queryExecutor = new QueryExecutor(connection);
+    }
+
+    public Optional<ArticleBean> findArticleById(String id) throws SQLException {
+
+        String query = "SELECT * FROM article WHERE id=:id";
+        Map<String, String> queryParam = new HashMap<>();
+        queryParam.put("id", id);
+        List<ArticleBean> articles = queryExecutor.select(query, queryParam, ArticleBean.class);
+        if (articles.size() == 1) return Optional.of(articles.get(0));
+        else
+            return Optional.empty();
     }
 
     public List<ArticleBean> findArticleByKeyword(String keyword) throws SQLException {

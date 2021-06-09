@@ -69,7 +69,7 @@ public class SaveArticleController extends GenericServlet {
             List<CartEntry> savedArticles = getExistingArticles(req.getSession());
             savedArticles.add(new CartEntry(articleId, qty));
             req.getSession().setAttribute(CART_SESSION_VAR, savedArticles);
-            resp.sendRedirect(getServletContext().getContextPath() + CART_PATH);
+            resp.sendRedirect(getServletContext().getContextPath() + CART_CONTROLLER_PATH);
         } catch (Exception e) {
             log.error("Something went wrong when saving article number {}. Cause is {}", articleId, e.getMessage());
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,

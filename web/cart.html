@@ -10,7 +10,7 @@
 <div align="right">
     <a th:href="@{/logout}">Logout</a>
 </div>
-<h1>Found articles</h1>
+<h1>Cart</h1>
 <p th:text="${'Nice to see you again ' + session.user.name + ' ' + session.user.surname}"></p>
 
 <table>
@@ -22,7 +22,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="article : ${searchedArticles}">
+    <tr th:each="article : ${cart_articles}">
         <td th:text="${article.getName()}"></td>
         <td th:text="${article.getDescription() }"></td>
         <td th:text="${article.getCategory()}"></td>
