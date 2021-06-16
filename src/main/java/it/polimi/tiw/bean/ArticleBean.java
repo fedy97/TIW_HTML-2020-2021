@@ -9,6 +9,7 @@ public class ArticleBean {
     String category;
     String photo;
     String quantity;
+    String price;
 
     public String getId() {
 
@@ -68,6 +69,14 @@ public class ArticleBean {
         this.quantity = quantity;
     }
 
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
     @Override
     public String toString() {
         return "ArticleBean{" +
@@ -77,6 +86,7 @@ public class ArticleBean {
                 ", category='" + category + '\'' +
                 ", photo='" + photo + '\'' +
                 ", quantity='" + quantity + '\'' +
+                ", price='" + price + '\'' +
                 '}';
     }
 }
