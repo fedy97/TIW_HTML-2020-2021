@@ -34,7 +34,7 @@ public class OrderDAO {
         List<OrderBean> result = queryExecutor.select(query, queryParam, OrderBean.class);
         if (result.isEmpty())
             return new ArrayList<>();
-        result.get(0).setArticleBeans(findArticlesByOrderId(orderId));
+        result.get(0).setArticleBeans(findArticlesByOrderId(orderId, result.get(0).getSeller_id()));
         return result;
     }
 
@@ -50,16 +50,19 @@ public class OrderDAO {
         queryParam.put("userId", userId);
         List<OrderBean> result = queryExecutor.select(query, queryParam, OrderBean.class);
         for (OrderBean orderBean : result)
-            orderBean.setArticleBeans(findArticlesByOrderId(orderBean.getId()));
+            orderBean.setArticleBeans(findArticlesByOrderId(orderBean.getId(), orderBean.getSeller_id()));
         return result;
     }
 
-    private List<ArticleBean> findArticlesByOrderId(String orderId) throws SQLException {
-        String query = "SELECT A.id, A.name, A.description, A.category, A.photo, A_O.quantity " +
+    private List<ArticleBean> findArticlesByOrderId(String orderId, String sellerId) throws SQLException {
+        String query = "SELECT A.id, A.name, A.description, A.category, A.photo, A_O.quantity, S_A.price " +
                 "FROM ecommerce.article A LEFT JOIN ecommerce.order_article A_O " +
                 "on A.id = A_O.article_id " +
-                "where A_O.order_id = :orderId";
+                "LEFT JOIN ecommerce.seller_article S_A " +
+                "on A.id = S_A.article_id " +
+                "where A_O.order_id = :orderId AND S_A.seller_id = :sellerId";
         Map<String, String> queryParam = new HashMap<>();
+        queryParam.put("sellerId", sellerId);
         queryParam.put("orderId", orderId);
         return queryExecutor.select(query, queryParam, ArticleBean.class);
     }

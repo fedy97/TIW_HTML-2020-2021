@@ -155,6 +155,7 @@ CREATE TABLE `seller_article` (
 LOCK TABLES `seller_article` WRITE;
 /*!40000 ALTER TABLE `seller_article` DISABLE KEYS */;
 /*!40000 ALTER TABLE `seller_article` ENABLE KEYS */;
+INSERT INTO `seller_article` VALUES (1, 1, 3.1),(2, 1, 4),(1,2,5.3);
 UNLOCK TABLES;
 
 --
