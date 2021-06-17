@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.thymeleaf.context.WebContext;
 
 import it.polimi.tiw.bean.ArticleBean;
-import it.polimi.tiw.bean.User;
+import it.polimi.tiw.bean.UserBean;
 import it.polimi.tiw.dao.ArticleDAO;
 import it.polimi.tiw.utils.GenericServlet;
 
@@ -30,6 +30,7 @@ public class SearchController extends GenericServlet {
     private static final String HINT_ATTRIBUTE     = "hint";
 
     private static final String RESULT_CONTEXT_VAR = "searchedArticles";
+    private static final String HINT_CONTEXT_VAR   = "hint";
 
     private static final String RESULTS_PAGE_PATH  = "/results.html";
 
@@ -43,11 +44,11 @@ public class SearchController extends GenericServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-//        Optional<User> user = getUserData(req);
-//        if (!user.isPresent()) {
-//            resp.sendRedirect(getServletContext().getContextPath() + LOGIN_PAGE_PATH);
-//            return;
-//        }
+        Optional<UserBean> user = getUserData(req);
+        if (!user.isPresent()) {
+            resp.sendRedirect(getServletContext().getContextPath() + LOGIN_PAGE_PATH);
+            return;
+        }
 
         String keyword;
         try {
@@ -68,6 +69,7 @@ public class SearchController extends GenericServlet {
             ServletContext servletContext = getServletContext();
             final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
             ctx.setVariable(RESULT_CONTEXT_VAR, foundArticles);
+            ctx.setVariable(HINT_CONTEXT_VAR, keyword);
             templateEngine.process(RESULTS_PAGE_PATH, ctx, resp.getWriter());
         } catch (Exception e) {
             log.error("Something went wrong when extracting article by keyword {}. Cause is {}", keyword,

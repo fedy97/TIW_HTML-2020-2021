@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import it.polimi.tiw.bean.User;
+import it.polimi.tiw.bean.UserBean;
 import it.polimi.tiw.utils.QueryExecutor;
 
 public class UserDAO {
@@ -20,7 +20,7 @@ public class UserDAO {
         queryExecutor = new QueryExecutor(connection);
     }
 
-    public Optional<User> checkCredentials(String usrn, String pwd) throws SQLException {
+    public Optional<UserBean> checkCredentials(String usrn, String pwd) throws SQLException {
 
         String query = "SELECT  id, email, name, surname FROM user  WHERE email = :usrn AND psw_hash =:pwd";
 
@@ -28,8 +28,8 @@ public class UserDAO {
         queryParam.put("usrn", usrn);
         queryParam.put("pwd", pwd);
         try {
-            List<User> matchingUsers = queryExecutor.select(query, queryParam, User.class);
-            if (matchingUsers.size() == 1) return Optional.of(matchingUsers.get(0));
+            List<UserBean> matchingUserBeans = queryExecutor.select(query, queryParam, UserBean.class);
+            if (matchingUserBeans.size() == 1) return Optional.of(matchingUserBeans.get(0));
             else return Optional.empty();
         } catch (Exception e) {
             throw new SQLException(

@@ -2,7 +2,7 @@ package it.polimi.tiw.bean;
 
 import java.io.Serializable;
 
-public class User implements Serializable {
+public class UserBean implements Serializable {
 
 	private String id;
 	private String email;

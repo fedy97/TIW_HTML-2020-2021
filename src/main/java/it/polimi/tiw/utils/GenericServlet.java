@@ -16,7 +16,7 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
-import it.polimi.tiw.bean.User;
+import it.polimi.tiw.bean.UserBean;
 
 public class GenericServlet extends HttpServlet {
 
@@ -62,12 +62,13 @@ public class GenericServlet extends HttpServlet {
         }
     }
 
-    protected Optional<User> getUserData(HttpServletRequest request) {
+    protected Optional<UserBean> getUserData(HttpServletRequest request) {
 
         HttpSession session = request.getSession();
         if (session.isNew() || session.getAttribute(USER_SESSION_ATTRIBUTE) == null) return Optional.empty();
         else
-            return Optional.of((User) session.getAttribute(USER_SESSION_ATTRIBUTE));
+            return Optional.of((UserBean) session.getAttribute(USER_SESSION_ATTRIBUTE));
 
     }
+
 }

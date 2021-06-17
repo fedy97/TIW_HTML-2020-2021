@@ -2,7 +2,7 @@
 package it.polimi.tiw.controller;
 
 import it.polimi.tiw.bean.OrderBean;
-import it.polimi.tiw.bean.User;
+import it.polimi.tiw.bean.UserBean;
 import it.polimi.tiw.dao.OrderDAO;
 import it.polimi.tiw.utils.GenericServlet;
 import org.slf4j.Logger;
@@ -18,7 +18,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-@WebServlet("/orders")
+@WebServlet("/order")
 public class OrderController extends GenericServlet {
 
     private static final Logger log = LoggerFactory.getLogger(OrderController.class.getSimpleName());
@@ -34,7 +34,7 @@ public class OrderController extends GenericServlet {
         // get and check params
         String orderId = null;
 
-        Optional<User> user = getUserData(req);
+        Optional<UserBean> user = getUserData(req);
         if (!user.isPresent()) {
             resp.sendRedirect(getServletContext().getContextPath() + LOGIN_PAGE_PATH);
             return;

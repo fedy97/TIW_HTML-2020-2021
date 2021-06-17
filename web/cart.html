@@ -7,40 +7,37 @@
           href="../CSS/mystyle.css" th:href="@{/css/mystyle.css}"/>
 </head>
 <body>
-<div align="right">
-    <a th:href="@{/logout}">Logout</a>
-</div>
-<h1>Cart</h1>
-<p th:text="${'Nice to see you again ' + session.user.name + ' ' + session.user.surname}"></p>
+    <div th:replace="navbar :: navbar"></div>
+    <h1>Cart</h1>
 
-<table>
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Category</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="article : ${cart_articles}">
-        <td th:text="${article.getName()}"></td>
-        <td th:text="${article.getDescription() }"></td>
-        <td th:text="${article.getCategory()}"></td>
-        <td>
-            <form action="#" th:action="@{/add}" method="POST">
-                <fieldset>
-                    <p>
-                        <input type="hidden" name="article_id" th:value="${article.getId()}" required/>
-                        <input type="text" name="article_qty" value="1" required/>
-                    </p>
-                    <input type="submit" name="Add">
-                </fieldset>
-            </form>
-        </td>
-        <!-- <td><a th:href="@{/GetMissionDetails(missionid=${m.id})}">Details</a></td>-->
-    </tr>
-    </tbody>
-</table>
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Category</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="article : ${cart_articles}">
+            <td th:text="${article.getName()}"></td>
+            <td th:text="${article.getDescription() }"></td>
+            <td th:text="${article.getCategory()}"></td>
+            <td>
+                <form action="#" th:action="@{/add}" method="POST">
+                    <fieldset>
+                        <p>
+                            <input type="hidden" name="article_id" th:value="${article.getId()}" required/>
+                            <input type="text" name="article_qty" value="1" required/>
+                        </p>
+                        <input type="submit" name="Add">
+                    </fieldset>
+                </form>
+            </td>
+            <!-- <td><a th:href="@{/GetMissionDetails(missionid=${m.id})}">Details</a></td>-->
+        </tr>
+        </tbody>
+    </table>
 
 </body>
 </html>

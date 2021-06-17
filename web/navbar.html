@@ -1,0 +1,7 @@
+<div th:fragment="navbar" xmlns:th="http://www.w3.org/1999/xhtml">
+    <a th:href="@{/home}">Home</a>
+    <a th:href="@{/cart}">Cart</a>
+    <a th:href="@{/order}">Orders</a>
+    <a th:href="@{/logout}">Logout</a>
+    <p th:text="${'Nice to see you again ' + session.user.name + ' ' + session.user.surname}"></p>
+</div>

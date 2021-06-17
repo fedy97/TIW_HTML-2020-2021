@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.thymeleaf.context.WebContext;
 
-import it.polimi.tiw.bean.User;
+import it.polimi.tiw.bean.UserBean;
 import it.polimi.tiw.dao.UserDAO;
 import it.polimi.tiw.utils.GenericServlet;
 
@@ -55,7 +55,7 @@ public class LoginController extends GenericServlet {
         }
 
         try {
-            Optional<User> user = getUserEntity(usrn, pwd);
+            Optional<UserBean> user = getUserEntity(usrn, pwd);
             if (!user.isPresent()) {
                 ServletContext servletContext = getServletContext();
                 final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
@@ -71,7 +71,7 @@ public class LoginController extends GenericServlet {
         }
     }
 
-    private Optional<User> getUserEntity(String usrn, String pwd) throws SQLException {
+    private Optional<UserBean> getUserEntity(String usrn, String pwd) throws SQLException {
 
         UserDAO userDao = new UserDAO(connection);
         return userDao.checkCredentials(usrn, pwd);

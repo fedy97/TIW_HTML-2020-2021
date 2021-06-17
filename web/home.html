@@ -7,10 +7,9 @@
           href="../CSS/mystyle.css" th:href="@{/css/mystyle.css}"/>
 </head>
 <body>
-    <div align="right">
-        <a th:href="@{/logout}">Logout</a>
-    </div>
-    <h1>Welcome to the Mission Mamagement Home Page</h1>
+<body>
+    <div th:replace="navbar :: navbar"></div>
+    <h1>Cart</h1>
     <p th:text="${'Nice to see you again ' + session.user.name + ' ' + session.user.surname}"></p>
 
     <table>

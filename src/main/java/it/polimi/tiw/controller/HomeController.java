@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.thymeleaf.context.WebContext;
 
 import it.polimi.tiw.bean.ArticleBean;
-import it.polimi.tiw.bean.User;
+import it.polimi.tiw.bean.UserBean;
 import it.polimi.tiw.dao.ArticleDAO;
 import it.polimi.tiw.utils.GenericServlet;
 
@@ -40,7 +40,7 @@ public class HomeController extends GenericServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-        Optional<User> user = getUserData(req);
+        Optional<UserBean> user = getUserData(req);
         if (!user.isPresent()) {
             resp.sendRedirect(getServletContext().getContextPath() + LOGIN_PAGE_PATH);
             return;
