@@ -2,11 +2,12 @@
 package it.polimi.tiw.dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import it.polimi.tiw.bean.ArticleBean;
 import it.polimi.tiw.bean.OrderBean;
@@ -15,9 +16,10 @@ import it.polimi.tiw.utils.QueryExecutor;
 public class OrderDAO {
 
     private final QueryExecutor queryExecutor;
+    private final Connection connection;
 
     public OrderDAO(Connection connection) {
-
+        this.connection = connection;
         queryExecutor = new QueryExecutor(connection);
     }
 
@@ -46,6 +48,47 @@ public class OrderDAO {
         for (OrderBean orderBean : result)
             orderBean.setArticleBeans(findArticlesByOrderId(orderBean.getId(), orderBean.getSellerId()));
         return result;
+    }
+
+    public void createOrder(OrderBean orderBean)
+            throws SQLException, ParseException {
+
+        String query = "INSERT into ecommerce.order (seller_id, user_id, shipment_date, order_date) VALUES (?, ?, ?, ?)";
+        int orderId;
+        try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+            pstatement.setInt(1, Integer.parseInt(orderBean.getSellerId()));
+            pstatement.setInt(2, Integer.parseInt(orderBean.getUserId()));
+            pstatement.setDate(3, (java.sql.Date) generateDateFromString(orderBean.getShipmentDate()));
+            pstatement.setDate(4, (java.sql.Date) generateDateFromString(orderBean.getOrderDate()));
+            int affectedRows = pstatement.executeUpdate();
+
+            if (affectedRows == 0)
+                throw new SQLException("Creating order failed, no rows affected.");
+            // get order id just created by sql auto increment function
+            try (ResultSet generatedKeys = pstatement.getGeneratedKeys()) {
+                if (generatedKeys.next())
+                    orderId = (int) generatedKeys.getLong(1);
+                else
+                    throw new SQLException("Creating order failed, no ID obtained.");
+            }
+        }
+        for (ArticleBean articleBean : orderBean.getArticleBeans()) {
+            String query2 = "INSERT into ecommerce.order_article (order_id, article_id, quantity) VALUES (?, ?, ?)";
+            try (PreparedStatement pstatement = connection.prepareStatement(query2);) {
+                pstatement.setInt(1, orderId);
+                pstatement.setInt(2, Integer.parseInt(articleBean.getId()));
+                pstatement.setInt(3, Integer.parseInt(articleBean.getQuantity()));
+                pstatement.executeUpdate();
+            }
+            // TODO add rollback if failed
+        }
+
+
+    }
+
+    private Date generateDateFromString(String date) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.parse(date);
     }
 
     private List<ArticleBean> findArticlesByOrderId(String orderId, String sellerId) throws SQLException {

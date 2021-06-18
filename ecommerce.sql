@@ -55,7 +55,7 @@ CREATE TABLE `order` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `seller_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `total` float NOT NULL,
+  `total` float,
   `shipment_date` datetime NOT NULL,
   `order_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
@@ -184,6 +184,7 @@ CREATE TABLE `shipping_policy` (
 LOCK TABLES `shipping_policy` WRITE;
 /*!40000 ALTER TABLE `shipping_policy` DISABLE KEYS */;
 /*!40000 ALTER TABLE `shipping_policy` ENABLE KEYS */;
+INSERT INTO `shipping_policy` VALUES (1, 1, 1, 3, 5.0),(2, 1, 4, null, 0.0),(3, 2, 1,3,4.0),(4, 2, 4,null,0.0);
 UNLOCK TABLES;
 
 --

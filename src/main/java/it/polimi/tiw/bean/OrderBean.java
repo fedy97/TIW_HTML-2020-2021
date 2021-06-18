@@ -6,18 +6,18 @@ import java.util.List;
 
 public class OrderBean implements Serializable {
 
-    private String            id;
-    private String            sellerId;
-    private String            total;
-    private String            shipmentDate;
-    private String            userId;
-    private String            sellerName;
-    private String            sellerRating;
-    private String            name;
-    private String            surname;
-    private String            email;
-    private String            shipmentAddr;
-    private String            orderDate;
+    private String id;
+    private String sellerId;
+    private String total;
+    private String shipmentDate;
+    private String userId;
+    private String sellerName;
+    private String sellerRating;
+    private String name;
+    private String surname;
+    private String email;
+    private String shipmentAddr;
+    private String orderDate;
     private List<ArticleBean> articleBeans;
 
     public String getId() {

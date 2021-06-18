@@ -5,16 +5,21 @@ import it.polimi.tiw.bean.OrderBean;
 import it.polimi.tiw.bean.UserBean;
 import it.polimi.tiw.dao.OrderDAO;
 import it.polimi.tiw.utils.GenericServlet;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.thymeleaf.context.WebContext;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,8 +72,7 @@ public class OrderController extends GenericServlet {
                 final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
                 ctx.setVariable("foundOrder", foundOrder.get(0));
                 templateEngine.process(RESULTS_PAGE_PATH, ctx, resp.getWriter());
-            }
-            else {
+            } else {
                 // get orders
                 List<OrderBean> foundOrders = getOrders(userId);
                 ServletContext servletContext = getServletContext();
@@ -80,6 +84,59 @@ public class OrderController extends GenericServlet {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     e.getMessage());
         }
+
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        Optional<UserBean> user = getUserData(request);
+        if (!user.isPresent()) {
+            response.sendRedirect(getServletContext().getContextPath() + LOGIN_PAGE_PATH);
+            return;
+        }
+
+        String userId = user.get().getId();
+
+        // Get and parse all parameters from request
+        boolean isBadRequest = false;
+        //Date startDate = null;
+        //String destination = null;
+        //String description = null;
+        //Integer days = null;
+        //try {
+        //    days = Integer.parseInt(request.getParameter("days"));
+        //    destination = StringEscapeUtils.escapeJava(request.getParameter("destination"));
+        //    description = StringEscapeUtils.escapeJava(request.getParameter("description"));
+        //    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        //    startDate = (Date) sdf.parse(request.getParameter("date"));
+
+        //} catch (NumberFormatException | NullPointerException | ParseException e) {
+        //    isBadRequest = true;
+        //    e.printStackTrace();
+        //}
+        if (isBadRequest) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect or missing param values");
+            return;
+        }
+
+        // Create mission in DB
+        OrderDAO orderDAO = new OrderDAO(connection);
+        try {
+            OrderBean orderBean = new OrderBean();
+            orderBean.setUserId(userId);
+            orderBean.setOrderDate(new Date().toString());
+            // TODO populate with right params orderBean
+            orderDAO.createOrder(orderBean);
+        } catch (SQLException | ParseException sqlException) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to create order");
+            return;
+        }
+
+        // return the user to the right view
+        String ctxpath = getServletContext().getContextPath();
+        String path = ctxpath + "/Home";
+        response.sendRedirect(path);
 
     }
 
