@@ -1,27 +1,16 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="ISO-8859-1">
-    <title>Home</title>
-    <link rel="stylesheet" type="text/css" media="all"
-          href="../CSS/mystyle.css" th:href="@{/css/mystyle.css}"/>
-</head>
-<body>
-    <div th:replace="fragments/navbar :: navbar"></div>
-
-    <table>
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Category</th>
-        </tr>
-        </thead>
+<div th:fragment="formField (field, value, size)" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div>
+        <div><img th:src="${article.getPhoto}"/></div>
+        <div>
+            <span th:text="${article.getName()}"></span>
+            <span th:text="${article.getPrice()} €"></span>
+            <span th:text="${article.getCategory()}"></span>
+            <span th:text="${article.getDescription()}"></span>
+        </div>
         <tbody>
-        <tr th:each="article : ${searchedArticles}">
+        <tr th:each="seller : ${sellers}">
             <td th:text="${article.getName()}"></td>
-            <td th:text="${article.getDescription() }"></td>
-            <td th:text="${article.getCategory()}"></td>
+            <td th:text="${article.getRating() }"></td>
             <td>
                 <form action="#" th:action="@{/add}" method="POST">
                     <fieldset>
@@ -36,7 +25,5 @@
             <!-- <td><a th:href="@{/GetMissionDetails(missionid=${m.id})}">Details</a></td>-->
         </tr>
         </tbody>
-    </table>
-
-</body>
-</html>
+    </div>
+</div>
