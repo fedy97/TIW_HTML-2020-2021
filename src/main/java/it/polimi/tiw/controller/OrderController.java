@@ -58,7 +58,7 @@ public class OrderController extends GenericServlet {
                     return;
                 }
                 // check if the order belongs to the logged user
-                if (!foundOrder.get(0).getUser_id().equals(userId)) {
+                if (!foundOrder.get(0).getUserId().equals(userId)) {
                     resp.sendError(HttpServletResponse.SC_FORBIDDEN, "You cannot view this order");
                     return;
                 }
