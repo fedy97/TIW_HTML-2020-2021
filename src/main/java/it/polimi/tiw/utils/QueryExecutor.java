@@ -47,7 +47,7 @@ public class QueryExecutor {
                 Arrays.stream(clazz.getDeclaredFields()).forEach(field -> {
                     try {
                         field.setAccessible(true);
-                        field.set(record, result.getString(field.getName()));
+                        field.set(record, result.getString(camelToSnake(field.getName())));
                         field.setAccessible(false);
                     } catch (IllegalAccessException | SQLException e) {
                         log.warn("Could not retrieve value of column {}", field.getName());
@@ -116,7 +116,7 @@ public class QueryExecutor {
         StringBuilder sb = new StringBuilder("INSERT INTO ");
         sb.append(tableName).append(" (");
 
-        fields.forEach(field -> sb.append(field.getName()).append(","));
+        fields.forEach(field -> sb.append(camelToSnake(field.getName())).append(","));
         sb.deleteCharAt(sb.length() - 1).append(") VALUES (");
 
         fields.forEach(field -> sb.append("?,"));
@@ -135,13 +135,13 @@ public class QueryExecutor {
         fields.stream().filter(field -> !idFieldName.equals(field.getName())).forEach(field -> {
             try {
                 field.setAccessible(true);
-                if (field.get(newRecord) != null) sb.append(field.getName()).append(" = ?, ");
+                if (field.get(newRecord) != null) sb.append(camelToSnake(field.getName())).append(" = ?, ");
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
         });
 
-        sb.deleteCharAt(sb.length() - 1).append(" WHERE ").append(idFieldName).append(" = ?;");
+        sb.deleteCharAt(sb.length() - 1).append(" WHERE ").append(camelToSnake(idFieldName)).append(" = ?;");
 
         return sb.toString();
     }
@@ -155,6 +155,40 @@ public class QueryExecutor {
     private List<Field> extractObjectFields(Object o) {
 
         return Arrays.asList(o.getClass().getDeclaredFields());
+    }
+
+    private String camelToSnake(String str) {
+
+        // Empty String
+        String result = "";
+
+        // Append first character(in lower case)
+        // to result string
+        char c = str.charAt(0);
+        result = result + Character.toLowerCase(c);
+
+        // Tarverse the string from
+        // ist index to last index
+        for (int i = 1; i < str.length(); i++) {
+
+            char ch = str.charAt(i);
+
+            // Check if the character is upper case
+            // then append '_' and such character
+            // (in lower case) to result string
+            if (Character.isUpperCase(ch)) {
+                result = result + '_';
+                result = result + Character.toLowerCase(ch);
+            }
+
+            // If the character is lower case then
+            // add such character into result string
+            else {
+                result = result + ch;
+            }
+        }
+
+        return result;
     }
 
 }
