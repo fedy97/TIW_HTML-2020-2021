@@ -68,6 +68,8 @@ public class SaveArticleController extends GenericServlet {
             article.setQuantity(qty.toString());
             Map<String, List<ArticleBean>> savedArticles = getExistingArticles(req.getSession());
             addSellerArticle(sellerId, article, savedArticles);
+            log.debug("Articles --> {}", savedArticles);
+            log.debug("Articles size --> {}", savedArticles.size());
             req.getSession().setAttribute(CART_SESSION_VAR, savedArticles);
             resp.sendRedirect(getServletContext().getContextPath() + CART_CONTROLLER_PATH);
         } catch (Exception e) {

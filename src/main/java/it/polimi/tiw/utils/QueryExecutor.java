@@ -38,8 +38,10 @@ public class QueryExecutor {
         finalQuery.set(query);
         param.forEach((name, value) -> {
             if (value instanceof String) finalQuery.set(finalQuery.get().replace(":" + name, "'" + value + "'"));
-            else
-                finalQuery.set(finalQuery.get().replace(":" + name, value.toString()));
+            else {
+                finalQuery.set(finalQuery.get().replace(":" + name,
+                        value.toString()));
+            }
         });
 
         log.debug(finalQuery.get());

@@ -70,6 +70,8 @@ public class CartController extends GenericServlet {
     private Map<String, OrderBean> buildCartModel(Map<String, List<ArticleBean>> articles) {
 
         Map<String, OrderBean> orderBeanMap = new HashMap<>();
+        log.debug("Articles --> {}", articles);
+        log.debug("Articles size --> {}", articles.size());
         articles.forEach((seller, articleList) -> {
             OrderBean orderBean = new OrderBean();
             orderBean.setArticleBeans(articleList);
@@ -113,7 +115,6 @@ public class CartController extends GenericServlet {
 
         ShipmentPolicyDAO shipmentPolicyDAO = new ShipmentPolicyDAO(connection);
         try {
-
             Optional<ShippingPolicyBean> shippingPolicy = shipmentPolicyDAO.findPolicyByQty(sellerId,
                     Integer.parseInt(articleQty));
             return shippingPolicy.map(shippingPolicyBean -> Float.parseFloat(shippingPolicyBean.getShipCost()))

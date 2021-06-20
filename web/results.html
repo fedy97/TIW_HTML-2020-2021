@@ -27,6 +27,7 @@
                     <fieldset>
                         <p>
                             <input type="hidden" name="article_id" th:value="${article.getId()}" required/>
+                            <input type="hidden" name="seller_id" th:value="1" />
                             <input type="text" name="article_qty" value="1" required/>
                         </p>
                         <input type="submit" name="Add">
