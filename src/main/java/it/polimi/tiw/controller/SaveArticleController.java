@@ -2,11 +2,8 @@
 package it.polimi.tiw.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
-import javax.servlet.ServletContext;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,10 +13,10 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.thymeleaf.context.WebContext;
 
+import it.polimi.tiw.bean.ArticleBean;
 import it.polimi.tiw.bean.UserBean;
-import it.polimi.tiw.utils.CartEntry;
+import it.polimi.tiw.dao.ArticleDAO;
 import it.polimi.tiw.utils.GenericServlet;
 
 @WebServlet("/add")
@@ -29,6 +26,7 @@ public class SaveArticleController extends GenericServlet {
             .getLogger(SaveArticleController.class.getSimpleName());
 
     private static final String ARTICLE_ID_FORM_DATA  = "article_id";
+    private static final String SELLER_ID_FORM_DATA   = "seller_id";
     private static final String ARTICLE_QTY_FORM_DATA = "article_qty";
 
     private static final long   serialVersionUID      = 1L;
@@ -48,9 +46,11 @@ public class SaveArticleController extends GenericServlet {
         }
 
         String articleId;
+        String sellerId;
         Integer qty;
         try {
             articleId = StringEscapeUtils.escapeJava(req.getParameter(ARTICLE_ID_FORM_DATA));
+            sellerId = StringEscapeUtils.escapeJava(req.getParameter(SELLER_ID_FORM_DATA));
             qty = Integer.parseInt(req.getParameter(ARTICLE_QTY_FORM_DATA));
             if (StringUtils.isBlank(articleId)) {
                 throw new Exception("Undefined article id or qty");
@@ -64,10 +64,10 @@ public class SaveArticleController extends GenericServlet {
 
         try {
             log.debug("Article id {}, qty {}", articleId, qty);
-            ServletContext servletContext = getServletContext();
-            final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
-            List<CartEntry> savedArticles = getExistingArticles(req.getSession());
-            savedArticles.add(new CartEntry(articleId, qty));
+            ArticleBean article = getExistingArticle(articleId);
+            article.setQuantity(qty.toString());
+            Map<String, List<ArticleBean>> savedArticles = getExistingArticles(req.getSession());
+            addSellerArticle(sellerId, article, savedArticles);
             req.getSession().setAttribute(CART_SESSION_VAR, savedArticles);
             resp.sendRedirect(getServletContext().getContextPath() + CART_CONTROLLER_PATH);
         } catch (Exception e) {
@@ -78,12 +78,27 @@ public class SaveArticleController extends GenericServlet {
 
     }
 
-    List<CartEntry> getExistingArticles(HttpSession session) {
+    private void addSellerArticle(String sellerId, ArticleBean article, Map<String, List<ArticleBean>> savedArticles) {
+
+        savedArticles.computeIfAbsent(sellerId, k -> new ArrayList<>());
+        savedArticles.get(sellerId).add(article);
+    }
+
+    private ArticleBean getExistingArticle(String articleId) throws Exception {
+
+        ArticleDAO articleDAO = new ArticleDAO(connection);
+        Optional<ArticleBean> articleBean = articleDAO.findArticleById(articleId);
+        if (!articleBean.isPresent()) throw new Exception("Article not found!");
+        else
+            return articleBean.get();
+    }
+
+    private Map<String, List<ArticleBean>> getExistingArticles(HttpSession session) {
 
         Object savedArticles = session.getAttribute(CART_SESSION_VAR);
-        if (savedArticles != null) return (List<CartEntry>) savedArticles;
+        if (savedArticles != null) return (Map<String, List<ArticleBean>>) savedArticles;
         else
-            return new ArrayList<>();
+            return new HashMap<>();
     }
 
 }

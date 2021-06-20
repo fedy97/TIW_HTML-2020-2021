@@ -27,7 +27,7 @@ public class QueryExecutor {
         this.con = connection;
     }
 
-    public <O> List<O> select(String query, Map<String, String> param, Class<O> clazz) throws SQLException {
+    public <O> List<O> select(String query, Map<String, Object> param, Class<O> clazz) throws SQLException {
 
         AtomicReference<String> finalQuery = new AtomicReference<>(query);
         List<O> extractedEntities = new ArrayList<>();
@@ -36,7 +36,11 @@ public class QueryExecutor {
             throw new SQLException("No exact match between the provided parameters and query");
 
         finalQuery.set(query);
-        param.forEach((name, value) -> finalQuery.set(finalQuery.get().replace(":" + name, "'" + value + "'")));
+        param.forEach((name, value) -> {
+            if (value instanceof String) finalQuery.set(finalQuery.get().replace(":" + name, "'" + value + "'"));
+            else
+                finalQuery.set(finalQuery.get().replace(":" + name, value.toString()));
+        });
 
         log.debug(finalQuery.get());
         try (PreparedStatement preparedStatement = con.prepareStatement(finalQuery.get());

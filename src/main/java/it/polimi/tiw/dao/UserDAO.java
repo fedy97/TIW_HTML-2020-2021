@@ -24,7 +24,7 @@ public class UserDAO {
 
         String query = "SELECT  id, email, name, surname FROM user  WHERE email = :usrn AND psw_hash =:pwd";
 
-        Map<String, String> queryParam = new HashMap<>();
+        Map<String, Object> queryParam = new HashMap<>();
         queryParam.put("usrn", usrn);
         queryParam.put("pwd", pwd);
         try {

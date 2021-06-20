@@ -23,7 +23,7 @@ public class ArticleDAO {
     public Optional<ArticleBean> findArticleById(String id) throws SQLException {
 
         String query = "SELECT * FROM article WHERE id=:id";
-        Map<String, String> queryParam = new HashMap<>();
+        Map<String, Object> queryParam = new HashMap<>();
         queryParam.put("id", id);
         List<ArticleBean> articles = queryExecutor.select(query, queryParam, ArticleBean.class);
         if (articles.size() == 1) return Optional.of(articles.get(0));
@@ -34,7 +34,7 @@ public class ArticleDAO {
     public List<ArticleBean> findArticleByKeyword(String keyword) throws SQLException {
 
         String query = "SELECT * FROM article WHERE name like :keyword or description like :keyword";
-        Map<String, String> queryParam = new HashMap<>();
+        Map<String, Object> queryParam = new HashMap<>();
         queryParam.put("keyword", "%" + keyword + "%");
         return queryExecutor.select(query, queryParam, ArticleBean.class);
     }
@@ -42,7 +42,7 @@ public class ArticleDAO {
     public List<ArticleBean> findArticleByViews(String userId) throws SQLException {
 
         String query = "SELECT * FROM article a LEFT OUTER JOIN user_article u_a ON a.id=u_a.article_id  WHERE u_a.user_id = :userid ORDER BY view_ts DESC LIMIT 5";
-        Map<String, String> queryParam = new HashMap<>();
+        Map<String, Object> queryParam = new HashMap<>();
         queryParam.put("userid", userId);
         return queryExecutor.select(query, queryParam, ArticleBean.class);
     }
@@ -51,6 +51,17 @@ public class ArticleDAO {
 
         String query = "SELECT * FROM article ORDER BY insr_ts DESC LIMIT " + articlesNumber;
         return queryExecutor.select(query, new HashMap<>(), ArticleBean.class);
+    }
+
+    public Float getArticlePrice(String sellerId, String articleId) throws SQLException {
+        String query = "SELECT * FROM article INNER JOIN seller_article ON (id = article_id) WHERE article_id=:article_id AND seller_id=:seller_id";
+        Map<String, Object> queryParam = new HashMap<>();
+        queryParam.put("seller_id",sellerId);
+        queryParam.put("article_id", articleId);
+        List<ArticleBean> articles =  queryExecutor.select(query, queryParam, ArticleBean.class);
+        if (articles.size() == 1) return Float.parseFloat(articles.get(0).getPrice());
+        else
+            return 0F;
     }
 
 }

@@ -23,7 +23,7 @@ public class SellerDAO {
     public Optional<ArticleBean> findArticleById(String id) throws SQLException {
 
         String query = "SELECT * FROM seller WHERE id=:id";
-        Map<String, String> queryParam = new HashMap<>();
+        Map<String, Object> queryParam = new HashMap<>();
         queryParam.put("id", id);
         List<ArticleBean> articles = queryExecutor.select(query, queryParam, ArticleBean.class);
         if (articles.size() == 1) return Optional.of(articles.get(0));
@@ -34,7 +34,7 @@ public class SellerDAO {
     public List<ArticleBean> findSellerByArticle(String keyword) throws SQLException {
 
         String query = "SELECT * FROM article WHERE name like :keyword or description like :keyword";
-        Map<String, String> queryParam = new HashMap<>();
+        Map<String, Object> queryParam = new HashMap<>();
         queryParam.put("keyword", "%" + keyword + "%");
         return queryExecutor.select(query, queryParam, ArticleBean.class);
     }

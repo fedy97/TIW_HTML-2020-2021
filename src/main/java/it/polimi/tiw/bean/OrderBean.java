@@ -6,18 +6,19 @@ import java.util.List;
 
 public class OrderBean implements Serializable {
 
-    private String id;
-    private String sellerId;
-    private String total;
-    private String shipmentDate;
-    private String userId;
-    private String sellerName;
-    private String sellerRating;
-    private String name;
-    private String surname;
-    private String email;
-    private String shipmentAddr;
-    private String orderDate;
+    private String            id;
+    private String            sellerId;
+    private String            priceArticles;
+    private String            priceShipment;
+    private String            shipmentDate;
+    private String            userId;
+    private String            sellerName;
+    private String            sellerRating;
+    private String            name;
+    private String            surname;
+    private String            email;
+    private String            shipmentAddr;
+    private String            orderDate;
     private List<ArticleBean> articleBeans;
 
     public String getId() {
@@ -40,14 +41,24 @@ public class OrderBean implements Serializable {
         this.sellerId = sellerId;
     }
 
-    public String getTotal() {
+    public String getPriceArticles() {
 
-        return total;
+        return priceArticles;
     }
 
-    public void setTotal(String total) {
+    public void setPriceArticles(String priceArticles) {
 
-        this.total = total;
+        this.priceArticles = priceArticles;
+    }
+
+    public String getPriceShipment() {
+
+        return priceShipment;
+    }
+
+    public void setPriceShipment(String priceShipment) {
+
+        this.priceShipment = priceShipment;
     }
 
     public String getShipmentDate() {
@@ -153,10 +164,11 @@ public class OrderBean implements Serializable {
     @Override
     public String toString() {
 
-        return "OrderBean{" + "id='" + id + '\'' + ", sellerId='" + sellerId + '\'' + ", total='" + total + '\''
-                + ", shipmentDate='" + shipmentDate + '\'' + ", userId='" + userId + '\'' + ", sellerName='"
-                + sellerName + '\'' + ", sellerRating='" + sellerRating + '\'' + ", name='" + name + '\''
-                + ", surname='" + surname + '\'' + ", email='" + email + '\'' + ", shipmentAddr='" + shipmentAddr + '\''
-                + ", orderDate='" + orderDate + '\'' + ", articleBeans=" + articleBeans + '}';
+        return "OrderBean{" + "id='" + id + '\'' + ", sellerId='" + sellerId + '\'' + ", priceArticles='"
+                + priceArticles + '\'' + ", priceShipment='" + priceShipment + '\'' + ", shipmentDate='" + shipmentDate
+                + '\'' + ", userId='" + userId + '\'' + ", sellerName='" + sellerName + '\'' + ", sellerRating='"
+                + sellerRating + '\'' + ", name='" + name + '\'' + ", surname='" + surname + '\'' + ", email='" + email
+                + '\'' + ", shipmentAddr='" + shipmentAddr + '\'' + ", orderDate='" + orderDate + '\''
+                + ", articleBeans=" + articleBeans + '}';
     }
 }
