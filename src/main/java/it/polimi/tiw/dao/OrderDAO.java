@@ -25,7 +25,7 @@ public class OrderDAO {
 
     public List<OrderBean> findOrderById(String orderId) throws SQLException {
 
-        String query = "SELECT O.id, O.seller_id, O.total, O.shipment_date, O.order_date, O.user_id, S.seller_name, S.seller_rating, U.name, U.surname, U.email, U.shipment_addr "
+        String query = "SELECT O.id, O.seller_id, O.price_articles, O.price_shipment, O.shipment_date, O.order_date, O.user_id, S.seller_name, S.seller_rating, U.name, U.surname, U.email, U.shipment_addr "
                 + "FROM ecommerce.order O LEFT JOIN ecommerce.seller S " + "on O.seller_id = S.id "
                 + "LEFT JOIN ecommerce.user U " + "on O.user_id = U.id " + "where O.id = :orderId";
         Map<String, Object> queryParam = new HashMap<>();
@@ -38,7 +38,7 @@ public class OrderDAO {
 
     public List<OrderBean> findOrders(String userId) throws SQLException {
 
-        String query = "SELECT O.id, O.seller_id, O.total, O.shipment_date, O.order_date, O.user_id, S.seller_name, S.seller_rating, U.name, U.surname, U.email, U.shipment_addr "
+        String query = "SELECT O.id, O.seller_id, O.price_articles, O.price_shipment, O.shipment_date, O.order_date, O.user_id, S.seller_name, S.seller_rating, U.name, U.surname, U.email, U.shipment_addr "
                 + "FROM ecommerce.order O LEFT JOIN ecommerce.seller S " + "on O.seller_id = S.id "
                 + "LEFT JOIN ecommerce.user U " + "on O.user_id = U.id " + "where O.user_id = :userId "
                 + "ORDER BY O.order_date DESC";
