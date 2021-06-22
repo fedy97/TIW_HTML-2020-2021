@@ -118,6 +118,7 @@ public class OrderController extends GenericServlet {
             Map<String, OrderBean> orders = (Map<String, OrderBean>) request.getSession().getAttribute("orders");
             OrderBean orderBean = orders.get(sellerId);
             orderBean.setUserId(userId);
+            orderBean.setSellerId(sellerId);
             orderBean.setOrderDate(new Date().toString());
             orderDAO.createOrder(orderBean);
         } catch (SQLException | ParseException sqlException) {
