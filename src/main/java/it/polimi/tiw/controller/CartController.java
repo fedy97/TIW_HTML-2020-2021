@@ -52,7 +52,9 @@ public class CartController extends GenericServlet {
         try {
             ServletContext servletContext = getServletContext();
             final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
-            ctx.setVariable(CART_CONTEXT_VAR, buildCartModel(extractArticlesInfo(req.getSession())));
+            Map<String, OrderBean> sellerOrders = buildCartModel(extractArticlesInfo(req.getSession()));
+            ctx.setVariable(CART_CONTEXT_VAR, sellerOrders);
+            req.getSession().setAttribute("orders", sellerOrders);
             templateEngine.process(CART_PAGE_PATH, ctx, resp.getWriter());
         } catch (Exception e) {
             log.error("Something went wrong when creating cart. Cause is {}", ExceptionUtils.getStackTrace(e));

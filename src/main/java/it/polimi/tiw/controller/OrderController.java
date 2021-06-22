@@ -19,6 +19,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @WebServlet("/order")
@@ -98,21 +99,14 @@ public class OrderController extends GenericServlet {
 
         // Get and parse all parameters from request
         boolean isBadRequest = false;
-        //Date startDate = null;
-        //String destination = null;
-        //String description = null;
-        //Integer days = null;
-        //try {
-        //    days = Integer.parseInt(request.getParameter("days"));
-        //    destination = StringEscapeUtils.escapeJava(request.getParameter("destination"));
-        //    description = StringEscapeUtils.escapeJava(request.getParameter("description"));
-        //    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        //    startDate = (Date) sdf.parse(request.getParameter("date"));
+        String sellerId = null;
+        try {
+          sellerId = request.getParameter("seller_id");
 
-        //} catch (NumberFormatException | NullPointerException | ParseException e) {
-        //    isBadRequest = true;
-        //    e.printStackTrace();
-        //}
+        } catch (NumberFormatException | NullPointerException e) {
+            isBadRequest = true;
+            e.printStackTrace();
+        }
         if (isBadRequest) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect or missing param values");
             return;
@@ -121,10 +115,10 @@ public class OrderController extends GenericServlet {
         // Create mission in DB
         OrderDAO orderDAO = new OrderDAO(connection);
         try {
-            OrderBean orderBean = new OrderBean();
+            Map<String, OrderBean> orders = (Map<String, OrderBean>) request.getSession().getAttribute("orders");
+            OrderBean orderBean = orders.get(sellerId);
             orderBean.setUserId(userId);
             orderBean.setOrderDate(new Date().toString());
-            // TODO populate with right params orderBean
             orderDAO.createOrder(orderBean);
         } catch (SQLException | ParseException sqlException) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to create order");

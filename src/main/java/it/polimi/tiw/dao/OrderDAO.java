@@ -53,13 +53,15 @@ public class OrderDAO {
     public void createOrder(OrderBean orderBean)
             throws SQLException, ParseException {
 
-        String query = "INSERT into ecommerce.order (seller_id, user_id, shipment_date, order_date) VALUES (?, ?, ?, ?)";
+        String query = "INSERT into ecommerce.order (seller_id, user_id, shipment_date, order_date, price_articles, price_shipment) VALUES (?, ?, ?, ?, ?, ?)";
         int orderId;
         try (PreparedStatement pstatement = connection.prepareStatement(query);) {
             pstatement.setInt(1, Integer.parseInt(orderBean.getSellerId()));
             pstatement.setInt(2, Integer.parseInt(orderBean.getUserId()));
             pstatement.setDate(3, (java.sql.Date) generateDateFromString(orderBean.getShipmentDate()));
             pstatement.setDate(4, (java.sql.Date) generateDateFromString(orderBean.getOrderDate()));
+            pstatement.setFloat(5, Float.parseFloat(orderBean.getPriceArticles()));
+            pstatement.setFloat(6, Float.parseFloat(orderBean.getPriceShipment()));
             int affectedRows = pstatement.executeUpdate();
 
             if (affectedRows == 0)
