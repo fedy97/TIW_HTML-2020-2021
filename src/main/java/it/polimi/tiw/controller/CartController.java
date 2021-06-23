@@ -1,6 +1,21 @@
 
 package it.polimi.tiw.controller;
 
+import it.polimi.tiw.bean.*;
+import it.polimi.tiw.dao.ArticleDAO;
+import it.polimi.tiw.dao.SellerDAO;
+import it.polimi.tiw.dao.ShipmentPolicyDAO;
+import it.polimi.tiw.utils.GenericServlet;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.thymeleaf.context.WebContext;
+
+import javax.servlet.ServletContext;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -9,31 +24,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.servlet.ServletContext;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.thymeleaf.context.WebContext;
-
-import it.polimi.tiw.bean.ArticleBean;
-import it.polimi.tiw.bean.OrderBean;
-import it.polimi.tiw.bean.ShippingPolicyBean;
-import it.polimi.tiw.bean.UserBean;
-import it.polimi.tiw.dao.ArticleDAO;
-import it.polimi.tiw.dao.ShipmentPolicyDAO;
-import it.polimi.tiw.utils.GenericServlet;
-
 @WebServlet("/cart")
 public class CartController extends GenericServlet {
 
-    private static final Logger log              = LoggerFactory.getLogger(CartController.class.getSimpleName());
+    private static final Logger log = LoggerFactory.getLogger(CartController.class.getSimpleName());
 
-    private static final long   serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     public CartController() {
 
@@ -78,9 +74,10 @@ public class CartController extends GenericServlet {
             OrderBean orderBean = new OrderBean();
             orderBean.setArticleBeans(articleList);
             orderBean.setSellerId(seller);
+            String priceArticles = computePriceArticles(seller, articleList);
+            orderBean.setPriceArticles(priceArticles);
             orderBean.setPriceShipment(
-                    Float.toString(extractShipmentPrice(seller, computeTotalArticles(articleList).toString())));
-            orderBean.setPriceArticles(computePriceArticles(seller, articleList));
+                    Float.toString(extractShipmentPrice(seller, computeTotalArticles(articleList).toString(), priceArticles)));
             orderBeanMap.put(seller, orderBean);
         });
         return orderBeanMap;
@@ -113,12 +110,18 @@ public class CartController extends GenericServlet {
         return counter.get();
     }
 
-    private Float extractShipmentPrice(String sellerId, String articleQty) {
+    private Float extractShipmentPrice(String sellerId, String articleQty, String priceArticles) {
 
         ShipmentPolicyDAO shipmentPolicyDAO = new ShipmentPolicyDAO(connection);
+        SellerDAO sellerDAO = new SellerDAO(connection);
+
         try {
+            Optional<SellerBean> sellerBean = sellerDAO.getSellerFromId(sellerId);
+            if (sellerBean.isPresent() && Float.parseFloat(priceArticles) >= sellerBean.get().getPrice_threshold())
+                return 0F;
             Optional<ShippingPolicyBean> shippingPolicy = shipmentPolicyDAO.findPolicyByQty(sellerId,
                     Integer.parseInt(articleQty));
+
             return shippingPolicy.map(shippingPolicyBean -> Float.parseFloat(shippingPolicyBean.getShipCost()))
                     .orElse(0F);
         } catch (SQLException e) {

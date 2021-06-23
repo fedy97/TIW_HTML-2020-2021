@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import it.polimi.tiw.bean.ArticleBean;
+import it.polimi.tiw.bean.SellerBean;
 import it.polimi.tiw.utils.QueryExecutor;
 
 public class SellerDAO {
@@ -18,6 +19,16 @@ public class SellerDAO {
     public SellerDAO(Connection connection) {
 
         queryExecutor = new QueryExecutor(connection);
+    }
+
+    public Optional<SellerBean> getSellerFromId(String id) throws SQLException {
+        String query = "SELECT * FROM seller WHERE id=:id";
+        Map<String, Object> queryParam = new HashMap<>();
+        queryParam.put("id", id);
+        List<SellerBean> sellers = queryExecutor.select(query, queryParam, SellerBean.class);
+        if (sellers.size() == 1) return Optional.of(sellers.get(0));
+        else
+            return Optional.empty();
     }
 
     public Optional<ArticleBean> findArticleById(String id) throws SQLException {

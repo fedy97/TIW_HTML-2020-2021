@@ -117,6 +117,7 @@ CREATE TABLE `seller` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `seller_name` varchar(45) NOT NULL,
   `seller_rating` float NOT NULL,
+  `price_threshold` float,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -128,7 +129,7 @@ CREATE TABLE `seller` (
 LOCK TABLES `seller` WRITE;
 /*!40000 ALTER TABLE `seller` DISABLE KEYS */;
 /*!40000 ALTER TABLE `seller` ENABLE KEYS */;
-INSERT INTO `seller` VALUES (1,'seller1', 3.0),(2,'seller2', 4.0);
+INSERT INTO `seller` VALUES (1,'seller1', 3.0, 100.0),(2,'seller2', 4.0, 50.0);
 UNLOCK TABLES;
 
 --
