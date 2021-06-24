@@ -30,6 +30,7 @@ CREATE TABLE `article` (
   `description` varchar(300) NOT NULL,
   `category` varchar(45) NOT NULL,
   `photo` varchar(100) NOT NULL,
+  `insr_ts` DATETIME DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -227,6 +228,7 @@ DROP TABLE IF EXISTS `user_article`;
 CREATE TABLE `user_article` (
   `user_id` int(11) NOT NULL,
   `article_id` int(11) NOT NULL,
+  `view_ts` DATETIME DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`user_id`,`article_id`),
   KEY `fk4_article_id_idx` (`article_id`),
   CONSTRAINT `fk4_article_id` FOREIGN KEY (`article_id`) REFERENCES `article` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
