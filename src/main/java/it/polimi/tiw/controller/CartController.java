@@ -117,7 +117,7 @@ public class CartController extends GenericServlet {
 
         try {
             Optional<SellerBean> sellerBean = sellerDAO.getSellerFromId(sellerId);
-            if (sellerBean.isPresent() && Float.parseFloat(priceArticles) >= sellerBean.get().getPrice_threshold())
+            if (sellerBean.isPresent() && sellerBean.get().getPrice_threshold() != 0.0f && Float.parseFloat(priceArticles) >= sellerBean.get().getPrice_threshold())
                 return 0F;
             Optional<ShippingPolicyBean> shippingPolicy = shipmentPolicyDAO.findPolicyByQty(sellerId,
                     Integer.parseInt(articleQty));
