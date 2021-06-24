@@ -40,7 +40,7 @@ public class UserDAO {
     }
 
     public void addArticleViewedByUser(String userId, String articleId) throws SQLException {
-        String query = "INSERT into ecommerce.order (user_id, article_id) VALUES (?, ?)";
+        String query = "INSERT into ecommerce.user_article (user_id, article_id) VALUES (?, ?)";
 
         try (PreparedStatement pstatement = connection.prepareStatement(query);) {
             pstatement.setInt(1, Integer.parseInt(userId));
