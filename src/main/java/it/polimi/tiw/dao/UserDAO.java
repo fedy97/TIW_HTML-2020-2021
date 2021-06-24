@@ -1,16 +1,14 @@
 
 package it.polimi.tiw.dao;
 
+import it.polimi.tiw.bean.UserArticleBean;
 import it.polimi.tiw.bean.UserBean;
 import it.polimi.tiw.utils.QueryExecutor;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class UserDAO {
 
@@ -46,6 +44,20 @@ public class UserDAO {
             pstatement.setInt(1, Integer.parseInt(userId));
             pstatement.setInt(2, Integer.parseInt(articleId));
             int affectedRows = pstatement.executeUpdate();
+        }
+    }
+
+    public List<UserArticleBean> getArticlesViewedByUser(String userId) throws SQLException {
+        String query = "SELECT * FROM user_article WHERE user_id = :userId";
+        Map<String, Object> queryParam = new HashMap<>();
+        queryParam.put("userId", userId);
+        try {
+            List<UserArticleBean> matchingUserArticleBeans = queryExecutor.select(query, queryParam, UserArticleBean.class);
+            if (matchingUserArticleBeans.size() > 0) return matchingUserArticleBeans;
+            else return new ArrayList<>();
+        } catch (Exception e) {
+            throw new SQLException(
+                    "Something went wrong when executing the query " + query + ". Cause is:" + e.getMessage());
         }
     }
 }
