@@ -18,21 +18,8 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="article : ${searchedArticles}">
-            <td th:text="${article.getName()}"></td>
-            <td th:text="${article.getDescription() }"></td>
-            <td th:text="${article.getCategory()}"></td>
-            <td>
-                <form action="#" th:action="@{/add}" method="POST">
-                    <fieldset>
-                        <p>
-                            <input type="hidden" name="article_id" th:value="${article.getId()}" required/>
-                            <input type="text" name="article_qty" value="1" required/>
-                        </p>
-                        <input type="submit" name="Add">
-                    </fieldset>
-                </form>
-            </td>
+        <tr th:each="order : ${foundOrders}">
+            <td th:text="${order.toString()}"></td>
             <!-- <td><a th:href="@{/GetMissionDetails(missionid=${m.id})}">Details</a></td>-->
         </tr>
         </tbody>

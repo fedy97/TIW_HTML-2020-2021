@@ -28,6 +28,7 @@ public class OrderController extends GenericServlet {
     private static final Logger log = LoggerFactory.getLogger(OrderController.class.getSimpleName());
 
     private static final String RESULTS_PAGE_PATH = "/orders.html";
+    private static final String ORDERS_CONTEXT_VAR  = "foundOrders";
 
     public OrderController() {
         super();
@@ -69,14 +70,14 @@ public class OrderController extends GenericServlet {
 
                 ServletContext servletContext = getServletContext();
                 final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
-                ctx.setVariable("foundOrder", foundOrder.get(0));
+                ctx.setVariable(ORDERS_CONTEXT_VAR, foundOrder.get(0));
                 templateEngine.process(RESULTS_PAGE_PATH, ctx, resp.getWriter());
             } else {
                 // get orders
                 List<OrderBean> foundOrders = getOrders(userId);
                 ServletContext servletContext = getServletContext();
                 final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
-                ctx.setVariable("foundOrders", foundOrders);
+                ctx.setVariable(ORDERS_CONTEXT_VAR, foundOrders);
                 templateEngine.process(RESULTS_PAGE_PATH, ctx, resp.getWriter());
             }
         } catch (Exception e) {
