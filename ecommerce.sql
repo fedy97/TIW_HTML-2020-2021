@@ -42,7 +42,7 @@ CREATE TABLE `article` (
 LOCK TABLES `article` WRITE;
 /*!40000 ALTER TABLE `article` DISABLE KEYS */;
 /*!40000 ALTER TABLE `article` ENABLE KEYS */;
-INSERT INTO `article` VALUES (1,'art1', 'descr1', 'cat1', 'photo1'),(2,'art2', 'descr2', 'cat2', 'photo2');
+INSERT INTO `article` (`name`, `description`, `category`, `photo`) VALUES ('art1', 'descr1', 'cat1', 'photo1'),('art2', 'descr2', 'cat2', 'photo2');
 UNLOCK TABLES;
 
 --
@@ -58,8 +58,8 @@ CREATE TABLE `order` (
   `user_id` int(11) NOT NULL,
   `price_articles` float,
   `price_shipment` float, 
-  `shipment_date` datetime NOT NULL,
-  `order_date` datetime NOT NULL,
+  `shipment_date` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `order_date` DATETIME DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `fk_user_id_idx` (`user_id`),
   KEY `fk_seller_id_idx` (`seller_id`),
@@ -75,7 +75,7 @@ CREATE TABLE `order` (
 LOCK TABLES `order` WRITE;
 /*!40000 ALTER TABLE `order` DISABLE KEYS */;
 /*!40000 ALTER TABLE `order` ENABLE KEYS */;
-INSERT INTO `order` VALUES (1,1,1,20,5,'2020-01-02','2020-01-01'),(2,2,1,30,0,'2021-03-04','2021-03-02');
+INSERT INTO `order` (`seller_id`, `user_id`, `price_articles`, `price_shipment`) VALUES (1,1,20,5),(2,1,30,0);
 
 UNLOCK TABLES;
 
