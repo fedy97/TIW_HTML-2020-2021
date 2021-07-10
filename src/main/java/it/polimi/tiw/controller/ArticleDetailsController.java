@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -21,10 +20,10 @@ import it.polimi.tiw.dao.ArticleDAO;
 import it.polimi.tiw.utils.GenericServlet;
 
 @WebServlet("/add")
-public class SaveArticleController extends GenericServlet {
+public class ArticleDetailsController extends GenericServlet {
 
     private static final Logger log                   = LoggerFactory
-            .getLogger(SaveArticleController.class.getSimpleName());
+            .getLogger(ArticleDetailsController.class.getSimpleName());
 
     private static final String ARTICLE_ID_FORM_DATA  = "article_id";
     private static final String SELLER_ID_FORM_DATA   = "seller_id";
@@ -32,7 +31,7 @@ public class SaveArticleController extends GenericServlet {
 
     private static final long   serialVersionUID      = 1L;
 
-    public SaveArticleController() {
+    public ArticleDetailsController() {
 
         super();
     }
@@ -58,7 +57,7 @@ public class SaveArticleController extends GenericServlet {
             }
 
         } catch (Exception e) {
-            log.error("Something went wrong when extracting article id or qty parameter. Cause is {}", ExceptionUtils.e.getMessage());
+            log.error("Something went wrong when extracting article id or qty parameter. Cause is {}", e.getMessage());
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing or empty required parameters");
             return;
         }

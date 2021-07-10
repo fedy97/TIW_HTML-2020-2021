@@ -51,6 +51,7 @@ public class CartController extends GenericServlet {
             ServletContext servletContext = getServletContext();
             final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
             Map<String, OrderBean> sellerOrders = buildCartModel(extractArticlesInfo(req.getSession()));
+            printCart(sellerOrders);
             ctx.setVariable(CART_CONTEXT_VAR, sellerOrders);
             req.getSession().setAttribute("orders", sellerOrders);
             templateEngine.process(CART_PAGE_PATH, ctx, resp.getWriter());
@@ -131,6 +132,13 @@ public class CartController extends GenericServlet {
             log.error("Something went wrong when extracting shippin policy for seller {}", sellerId);
         }
         return 0F;
+    }
+
+    private void printCart(Map<String, OrderBean> sellerOrders) {
+
+        sellerOrders.forEach((k, v) -> {
+            log.info("Key: {}, Value: {}", k, v.toString());
+        });
     }
 
 }

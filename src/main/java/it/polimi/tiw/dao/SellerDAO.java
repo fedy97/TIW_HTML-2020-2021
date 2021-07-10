@@ -31,15 +31,12 @@ public class SellerDAO {
             return Optional.empty();
     }
 
-    public Optional<ArticleBean> findArticleById(String id) throws SQLException {
+    public List<SellerBean> findSellerByArticleId(String id) throws SQLException {
 
-        String query = "SELECT * FROM seller WHERE id=:id";
+        String query = "SELECT * FROM seller INNER JOIN seller_article ON seller_article.id=seller.id WHERE article_id=:id";
         Map<String, Object> queryParam = new HashMap<>();
         queryParam.put("id", id);
-        List<ArticleBean> articles = queryExecutor.select(query, queryParam, ArticleBean.class);
-        if (articles.size() == 1) return Optional.of(articles.get(0));
-        else
-            return Optional.empty();
+        return queryExecutor.select(query, queryParam, SellerBean.class);
     }
 
     public List<ArticleBean> findSellerByArticle(String keyword) throws SQLException {

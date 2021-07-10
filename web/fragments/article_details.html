@@ -12,7 +12,7 @@
             <td th:text="${article.getName()}"></td>
             <td th:text="${article.getRating() }"></td>
             <td>
-                <form action="#" th:action="@{/add}" method="POST">
+                <form action="#" th:action="@{/order}" method="POST">
                     <fieldset>
                         <p>
                             <input type="hidden" name="article_id" th:value="${article.getId()}" required/>
