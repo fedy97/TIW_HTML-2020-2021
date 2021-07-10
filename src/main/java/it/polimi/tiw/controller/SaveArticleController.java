@@ -9,9 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,7 +58,8 @@ public class SaveArticleController extends GenericServlet {
             }
 
         } catch (Exception e) {
-            log.error("Something went wrong when extracting article id or qty parameter. Cause is {}", ExceptionUtils.e.getMessage());
+            log.error("Something went wrong when extracting article id or qty parameter. Cause is {}",
+                    ExceptionUtils.getStackTrace(e));
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing or empty required parameters");
             return;
         }
