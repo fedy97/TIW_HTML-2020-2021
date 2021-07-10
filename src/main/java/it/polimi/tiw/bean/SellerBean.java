@@ -1,43 +1,52 @@
+
 package it.polimi.tiw.bean;
 
 import java.io.Serializable;
 
 public class SellerBean implements Serializable {
 
-	private String id;
-	private String seller_name;
-	private float seller_rating;
-	private float price_threshold;
+    private String id;
+    private String sellerName;
+    private String sellerRating;
+    private String priceThreshold;
 
-	public String getId() {
-		return id;
-	}
+    public String getId() {
 
-	public void setId(String id) {
-		this.id = id;
-	}
+        return id;
+    }
 
-	public String getSeller_name() {
-		return seller_name;
-	}
+    public void setId(String id) {
 
-	public void setSeller_name(String seller_name) {
-		this.seller_name = seller_name;
-	}
+        this.id = id;
+    }
 
-	public float getSeller_rating() {
-		return seller_rating;
-	}
+    public String getSellerName() {
 
-	public void setSeller_rating(float seller_rating) {
-		this.seller_rating = seller_rating;
-	}
+        return sellerName;
+    }
 
-	public float getPrice_threshold() {
-		return price_threshold;
-	}
+    public void setSellerName(String sellerName) {
 
-	public void setPrice_threshold(float price_threshold) {
-		this.price_threshold = price_threshold;
-	}
+        this.sellerName = sellerName;
+    }
+
+    public String getSellerRating() {
+
+        return sellerRating;
+    }
+
+    public void setSellerRating(String sellerRating) {
+
+        this.sellerRating = sellerRating;
+    }
+
+    public String getPriceThreshold() {
+
+        return priceThreshold;
+    }
+
+    public void setPriceThreshold(String priceThreshold) {
+
+        this.priceThreshold = priceThreshold;
+    }
 }
