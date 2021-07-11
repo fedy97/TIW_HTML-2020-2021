@@ -39,8 +39,7 @@ public class QueryExecutor {
         param.forEach((name, value) -> {
             if (value instanceof String) finalQuery.set(finalQuery.get().replace(":" + name, "'" + value + "'"));
             else {
-                finalQuery.set(finalQuery.get().replace(":" + name,
-                        value.toString()));
+                finalQuery.set(finalQuery.get().replace(":" + name, value.toString()));
             }
         });
 
@@ -51,10 +50,13 @@ public class QueryExecutor {
             while (result.next()) {
                 O record = clazz.getDeclaredConstructor().newInstance();
                 Arrays.stream(clazz.getDeclaredFields()).forEach(field -> {
+
                     try {
-                        field.setAccessible(true);
-                        field.set(record, result.getString(camelToSnake(field.getName())));
-                        field.setAccessible(false);
+                        if (!field.isAnnotationPresent(Ignore.class)) {
+                            field.setAccessible(true);
+                            field.set(record, result.getString(camelToSnake(field.getName())));
+                            field.setAccessible(false);
+                        }
                     } catch (IllegalAccessException | SQLException e) {
                         log.warn("Could not retrieve value of column {}", field.getName());
                     }
