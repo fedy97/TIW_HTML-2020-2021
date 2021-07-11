@@ -31,4 +31,12 @@ public class ShipmentPolicyDAO {
         else
             return Optional.empty();
     }
+
+    public List<ShippingPolicyBean> findPolicyBySellerId(String sellerId) throws SQLException {
+
+        String query = "SELECT * FROM shipping_policy WHERE seller_id=:seller_id";
+        Map<String, Object> queryParam = new HashMap<>();
+        queryParam.put("seller_id", sellerId);
+        return queryExecutor.select(query, queryParam, ShippingPolicyBean.class);
+    }
 }

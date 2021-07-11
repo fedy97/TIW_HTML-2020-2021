@@ -8,7 +8,9 @@
 </head>
 <body>
     <div th:replace="fragments/navbar :: navbar"></div>
-
+    <div th:if="${show_article_details}">
+        <div th:replace="fragments/article_details :: article_details"></div>
+    </div>
     <table>
         <thead>
         <tr>
@@ -18,23 +20,21 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="article : ${searchedArticles}">
+        <tr th:each="article : ${searched_articles}">
             <td th:text="${article.getName()}"></td>
             <td th:text="${article.getDescription() }"></td>
             <td th:text="${article.getCategory()}"></td>
             <td>
-                <form action="#" th:action="@{/add}" method="POST">
+                <form action="#" th:action="@{/search}" method="GET">
                     <fieldset>
                         <p>
                             <input type="hidden" name="article_id" th:value="${article.getId()}" required/>
-                            <input type="hidden" name="seller_id" th:value="1" />
-                            <input type="text" name="article_qty" value="1" required/>
+                            <input type="hidden" name="hint" th:value="${#httpServletRequest.getParameter('hint')}" required/>
                         </p>
-                        <input type="submit" name="Add">
+                        <input type="submit" value="Show details">
                     </fieldset>
                 </form>
             </td>
-            <!-- <td><a th:href="@{/GetMissionDetails(missionid=${m.id})}">Details</a></td>-->
         </tr>
         </tbody>
     </table>

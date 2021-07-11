@@ -1,29 +1,33 @@
-<div th:fragment="formField (field, value, size)" xmlns:th="http://www.w3.org/1999/xhtml">
+<div th:fragment="article_details" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div><img th:src="${article.getPhoto}"/></div>
     <div>
-        <div><img th:src="${article.getPhoto}"/></div>
-        <div>
-            <span th:text="${article.getName()}"></span>
-            <span th:text="${article.getPrice()} €"></span>
-            <span th:text="${article.getCategory()}"></span>
-            <span th:text="${article.getDescription()}"></span>
-        </div>
-        <tbody>
-        <tr th:each="seller : ${sellers}">
-            <td th:text="${article.getName()}"></td>
-            <td th:text="${article.getRating() }"></td>
-            <td>
-                <form action="#" th:action="@{/order}" method="POST">
-                    <fieldset>
-                        <p>
-                            <input type="hidden" name="article_id" th:value="${article.getId()}" required/>
-                            <input type="text" name="article_qty" value="1" required/>
-                        </p>
-                        <input type="submit" name="Add">
-                    </fieldset>
-                </form>
-            </td>
-            <!-- <td><a th:href="@{/GetMissionDetails(missionid=${m.id})}">Details</a></td>-->
-        </tr>
-        </tbody>
+        <span th:text="${article.getName()}"></span>
+        <span th:text="${article.getCategory()}"></span>
+        <span th:text="${article.getDescription()}"></span>
     </div>
+    <tbody>
+    <tr th:each="seller_offer : ${seller_offers}">
+        <td th:text="'Seller ' + ${seller_offer.getSellerName()}"></td>
+        <td th:text="'Price ' + ${seller_offer.getPrice()}"></td>
+        <td th:text="'Rating ' + ${seller_offer.getSellerRating()}"></td>
+        <td th:text="'Free shipping for orders greater than ' + ${seller_offer.getPriceThreshold()} + ${'&euro;'}"></td>
+        <td>
+            <p th:each="shipping_policy : ${seller_offer.getShippingPolicies()}"></p>
+        </td>
+        <td th:text="${seller_offer.getExistingArticles()} ? 'You have already '+ ${seller_offer.getExistingArticles().getLeft()} + ' for a total of ' + ${seller_offer.getExistingArticles().getRight()}:
+            'You do not have articles of this seller in your cart yet'"></td>
+        <form action="#" th:action="@{/add}" method="POST">
+            <fieldset>
+                <p>
+                    <input type="hidden" name="article_id" th:value="${article.getId()}" required/>
+                    <input type="hidden" name="seller_id" th:value="${seller_offer.getSellerId()}" required/>
+                    <input type="text" name="article_qty" value="1" required/>
+                </p>
+                <input type="submit" name="Add">
+            </fieldset>
+        </form>
+    </tr>
+    </tbody>
 </div>
+
+

@@ -2,6 +2,7 @@
 package it.polimi.tiw.controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.*;
 
 import javax.servlet.annotation.WebServlet;
@@ -18,7 +19,9 @@ import org.slf4j.LoggerFactory;
 import it.polimi.tiw.bean.ArticleBean;
 import it.polimi.tiw.bean.UserBean;
 import it.polimi.tiw.dao.ArticleDAO;
+import it.polimi.tiw.dao.SellerArticleDAO;
 import it.polimi.tiw.utils.GenericServlet;
+import it.polimi.tiw.utils.SellerArticleEntry;
 
 @WebServlet("/add")
 public class SaveArticleController extends GenericServlet {
@@ -68,6 +71,7 @@ public class SaveArticleController extends GenericServlet {
             log.debug("Article id {}, qty {}", articleId, qty);
             ArticleBean article = getExistingArticle(articleId);
             article.setQuantity(qty.toString());
+            article.setPrice(getArticlePrice(articleId, sellerId));
             Map<String, List<ArticleBean>> savedArticles = getExistingArticles(req.getSession());
             addSellerArticle(sellerId, article, savedArticles);
             log.debug("Articles --> {}", savedArticles);
@@ -86,6 +90,14 @@ public class SaveArticleController extends GenericServlet {
 
         savedArticles.computeIfAbsent(sellerId, k -> new ArrayList<>());
         savedArticles.get(sellerId).add(article);
+    }
+
+    private String getArticlePrice(String articleId, String sellerId) throws SQLException {
+
+        Optional<SellerArticleEntry> sellerArticleEntry = new SellerArticleDAO(connection).findEntry(articleId,
+                sellerId);
+        if (sellerArticleEntry.isPresent()) return sellerArticleEntry.get().getPrice();
+        return "";
     }
 
     private ArticleBean getExistingArticle(String articleId) throws Exception {
