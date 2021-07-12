@@ -1,6 +1,10 @@
 
 package it.polimi.tiw.dao;
 
+import it.polimi.tiw.bean.ArticleBean;
+import it.polimi.tiw.bean.OrderBean;
+import it.polimi.tiw.utils.QueryExecutor;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,10 +12,6 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
-import it.polimi.tiw.bean.ArticleBean;
-import it.polimi.tiw.bean.OrderBean;
-import it.polimi.tiw.utils.QueryExecutor;
 
 public class OrderDAO {
 
@@ -51,7 +51,9 @@ public class OrderDAO {
     }
 
     public void createOrder(OrderBean orderBean)
-            throws SQLException, ParseException {
+            throws SQLException {
+
+        connection.setAutoCommit(false);
 
         String query = "INSERT into ecommerce.order (seller_id, user_id, price_articles, price_shipment) VALUES (?, ?, ?, ?)";
         int orderId;
@@ -71,6 +73,10 @@ public class OrderDAO {
                 else
                     throw new SQLException("Creating order failed, no ID obtained.");
             }
+            connection.commit();
+        } catch (SQLException e) {
+            connection.rollback();
+            throw e;
         }
         for (ArticleBean articleBean : orderBean.getArticleBeans()) {
             String query2 = "INSERT into ecommerce.order_article (order_id, article_id, quantity) VALUES (?, ?, ?)";
@@ -79,11 +85,13 @@ public class OrderDAO {
                 pstatement.setInt(2, Integer.parseInt(articleBean.getId()));
                 pstatement.setInt(3, Integer.parseInt(articleBean.getQuantity()));
                 pstatement.executeUpdate();
+            } catch (SQLException e) {
+                connection.rollback();
+                throw e;
             }
-            // TODO add rollback if failed
         }
-
-
+        connection.commit();
+        connection.setAutoCommit(true);
     }
 
     private Date generateDateFromString(String date) throws ParseException {
