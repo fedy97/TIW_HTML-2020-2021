@@ -73,7 +73,6 @@ public class OrderDAO {
                 else
                     throw new SQLException("Creating order failed, no ID obtained.");
             }
-            connection.commit();
         } catch (SQLException e) {
             connection.rollback();
             throw e;
