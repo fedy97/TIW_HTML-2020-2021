@@ -22,7 +22,7 @@ html, body{
 	min-width: 200px; 
 	height: 150px; 
 	background-color: #fafafa; 
-    border: solid 2px #7952b3; 
+    border: solid 2px #232f3e; 
     border-radius: 20px;
     text-align: center; 
     padding: 0.5rem;
@@ -39,7 +39,7 @@ html, body{
     margin-top: 10px;
 }
 .header-title{
-	color : #7952b3; 
+	color : #232f3e; 
 }
 /*
     Standard elements
@@ -79,21 +79,21 @@ hr{
     font-weight: 600;
     font-size: 0.8rem;
 }
-.btn-purple{
+.btn-blue{
     color: #fff;
-    background-color: #7952b3;
-    border-color: #7952b3;
+    background-color: #232f3e;
+    border-color: #232f3e;
     cursor: pointer;
 }
-.btn-inverted-purple{
+.btn-inverted-blue{
     color:#000;
     background-color: #fff;
-    border-color: #7952b3;
+    border-color: #232f3e;
     border-width: 2px;
 }
-.btn-inverted-purple:hover{
+.btn-inverted-blue:hover{
     color:#fff;
-    background-color: #7952b3;
+    background-color: #232f3e;
 }
 /*
     Forms
@@ -131,15 +131,14 @@ hr{
 /*
     Colored divs
 */
-.purple-div{
+.blue-div{
     margin: 0 auto;
-    border: 2px solid #6f42c1;
-    border-radius: 20px;
+    border: 2px solid #232f3e;
     box-shadow: 0 1rem 3rem rgba(0,0,0,0.175); /* x-offset y-offset radius color */
     padding: 1rem;
 }
-.purple-div .form-group > input:hover{
-    border: 1px solid #6f42c1;
+.blue-div .form-group > input:hover{
+    border: 1px solid #232f3e;
 }
 
 /*
