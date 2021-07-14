@@ -2,45 +2,52 @@
     Fonts
 */
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
 /*
     Root
 */
-html, body{
-    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"; /* first supported font will be selected for the page */
+html, body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; /* first supported font will be selected for the page */
     font-size: 1rem; /* 1* font size of root element */
     font-weight: 400; /* font thickness */
     line-height: 1.5; /* 1.5 * font size */
     color: #212529; /* font color */
 }
+
 /*
     Header
 */
-.header-div{
-	position: absolute; 
+.header-div {
+    position: absolute;
     right: 1rem;
     top: 1rem;
-	min-width: 200px; 
-	height: 150px; 
-	background-color: #fafafa; 
-    border: solid 2px #232f3e; 
+    min-width: 200px;
+    height: 150px;
+    background-color: #fafafa;
+    border: solid 2px #232f3e;
     border-radius: 20px;
-    text-align: center; 
+    text-align: center;
     padding: 0.5rem;
     z-index: 100;
 }
-.header-content{
+
+.header-content {
     line-height: 1.5rem;
 }
-.header-buttons{
+
+.header-buttons {
     display: flex;
     flex-direction: column;
 }
+
 .header-buttons span {
     margin-top: 10px;
 }
-.header-title{
-	color : #232f3e; 
+
+.header-title {
+    color: #232f3e;
 }
+
 /*
     Standard elements
 */
@@ -49,62 +56,77 @@ a {
     cursor: pointer;
     text-decoration: none;
 }
-hr{
+
+hr {
     margin-top: 1rem;
     margin-bottom: 1rem;
     border: 0;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
+
+form {
+    border: 0;
+}
+
+
 /*
     Buttons
 */
-.btn{
+.btn {
     text-align: center;
     vertical-align: middle;
     border-radius: 5px;
     border-style: solid;
 }
-.btn-large{
+
+.btn-large {
     padding: .8rem 2rem;
     font-weight: 600;
     font-size: 1rem;
 }
-.btn-medium{
+
+.btn-medium {
     padding: .25rem 1rem;
     font-weight: 600;
     font-size: 1rem;
 }
-.btn-small{
+
+.btn-small {
     padding: .25rem 1rem;
     font-weight: 600;
     font-size: 0.8rem;
 }
-.btn-blue{
+
+.btn-blue {
     color: #fff;
     background-color: #232f3e;
     border-color: #232f3e;
     cursor: pointer;
 }
-.btn-inverted-blue{
-    color:#000;
+
+.btn-inverted-blue {
+    color: #000;
     background-color: #fff;
     border-color: #232f3e;
     border-width: 2px;
 }
-.btn-inverted-blue:hover{
-    color:#fff;
+
+.btn-inverted-blue:hover {
+    color: #fff;
     background-color: #232f3e;
 }
+
 /*
     Forms
 */
-.form-group{
+.form-group {
     margin-bottom: 1rem;
     width: 100%;
     display: flex;
     flex-direction: row; /* children flow as row */
-    justify-content: center; /* center flex childen */
+    justify-content: center; /* center flex children */
 }
+
 .form-group > input {
     padding: 0.5rem;
     border-radius: 0 5px 5px 0;
@@ -115,6 +137,7 @@ hr{
     line-height: 1.5; /* 1.5 times the font size */
     width: 80%;
 }
+
 .form-group > label {
     padding: 0.5rem;
     border-radius: 5px 0 0 5px;
@@ -128,53 +151,67 @@ hr{
     font-size: 0.75rem;
     width: 20%;
 }
+
 /*
     Colored divs
 */
-.blue-div{
+.blue-div {
     margin: 0 auto;
     border: 2px solid #232f3e;
-    box-shadow: 0 1rem 3rem rgba(0,0,0,0.175); /* x-offset y-offset radius color */
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175); /* x-offset y-offset radius color */
     padding: 1rem;
 }
-.blue-div .form-group > input:hover{
+
+.blue-div .form-group > input:hover {
     border: 1px solid #232f3e;
 }
 
 /*
-    Card
+    item
 */
-.card{
+.item {
     margin: 0 auto;
     padding: 1rem;
     border: 1px solid #000000;
     position: relative;
     min-height: 80px;
-    border-radius: 10px;
+    text-align: justify;
 }
-.card + .card{
+
+.item + .item {
     margin-top: 10px;
 }
-.card > .btn-primary{
+
+.item > .btn-primary {
     position: absolute;
     top: 60px;
     right: 1rem;
 }
-.card-title{
+
+.item img {
+    max-height: 250px;
+    margin-top: 1rem;
+    right: 1rem;
+}
+
+.item-title {
     font-weight: 600;
     font-size: 1.2rem;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
-.card-data{
+
+.item-data {
     margin-top: 0.25rem;
 }
-.card-blue{
+
+.item-blue {
     border: 1px solid #17a2b8;
 }
+
 /*
-    Linked card
+    Linked item
 */
-.linked-card{
+.linked-item {
     margin: 0 auto;
     padding: 1rem;
     border: 1px solid #000000;
@@ -182,44 +219,74 @@ hr{
     position: relative;
     min-height: 80px;
 }
-.linked-card:first-child{
+
+.linked-item:first-child {
     border-top-left-radius: 10px; /* specified this way, otherwise we'll have problems with a single node */
     border-top-right-radius: 10px; /* in that case, last-child will reset top radius */
 }
-.linked-card + .linked-card{
+
+.linked-item + .linked-item {
     border-top: 1px dashed #000000;
 }
-.linked-card:last-child{
+
+.linked-item:last-child {
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
     border-bottom: 1px solid #000000;
 }
-.linked-card-title{
+
+.linked-item-title {
     font-weight: 500;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
-.linked-card-data{
+
+.linked-item-data {
     margin-top: 0.25rem;
 }
-.linked-card > .btn-primary{
+
+.linked-item > .btn-primary {
     position: absolute;
     top: 60px;
     right: 1rem;
 }
+
 /* Blue version */
-.linked-card-blue{
+.linked-item-blue {
     border: 1px solid #17a2b8;
-    border-bottom: none; /* need to reset the bottom border, otherwise consecutive cards would have double borders */
+    border-bottom: none; /* need to reset the bottom border, otherwise consecutive items would have double borders */
 }
-.linked-card-blue + .linked-card-blue{
+
+.linked-item-blue + .linked-item-blue {
     border-top: 1px dashed #17a2b8;
 }
-.linked-card-blue:last-child{
+
+.linked-item-blue:last-child {
     border-bottom: 1px solid #17a2b8;
 }
+
 /*
     Warning
 */
-.warning-message{
+.warning-message {
     color: #e74a3b;
 }
+
+
+.article-div{
+    margin-top: 20px;
+}
+.article-title{
+    font-size: 1.2rem;
+    line-height: 2rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+.even{
+    background-color: rgb(111, 66, 193, 0.05);
+}
+.no-articles{
+    font-size: 1.5rem;
+    font-weight: 500;
+    text-align: center;
+}
+

@@ -70,13 +70,10 @@ public class SearchController extends GenericServlet {
         try {
             keyword = StringEscapeUtils.escapeJava(req.getParameter(HINT_ATTRIBUTE));
             articleId = req.getParameter(ARTICLE_ID_ATTRIBUTE);
-            if (StringUtils.isBlank(keyword)) {
-                throw new Exception("Missing or empty search keyword");
-            }
 
         } catch (Exception e) {
             log.error("Something went wrong when extracting search hint parameters. Cause is {}", e.getMessage());
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing or empty search keyword");
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Malformed parameters");
             return;
         }
 

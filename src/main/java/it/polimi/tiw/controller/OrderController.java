@@ -123,7 +123,7 @@ public class OrderController extends GenericServlet {
             orderBean.setOrderDate(new Date().toString());
             orderBean.setShipmentDate(new Date().toString());
             orderDAO.createOrder(orderBean);
-        } catch (SQLException | ParseException sqlException) {
+        } catch (SQLException sqlException) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to create order");
             return;
         }
