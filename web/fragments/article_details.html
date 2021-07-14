@@ -17,7 +17,7 @@
             </div>
             <p th:each="shipping_policy : ${seller_offer.getShippingPolicies()}"></p>
 
-            <div><span th:text="${seller_offer.getExistingArticles()} ? 'You have already '+ ${seller_offer.getExistingArticles().getLeft()} + ' for a total of ' + ${seller_offer.getExistingArticles().getRight() + 'euro'}:
+            <div><span th:text="${seller_offer.getExistingArticles()} ? 'You have already '+ ${seller_offer.getExistingArticles().getLeft()} + ' for a total of ' + ${seller_offer.getExistingArticles().getRight() + ' euro'}:
             'You do not have articles of this seller in your cart yet'"></span></div>
             <br>
             <form class="add-article-form" action="#" th:action="@{/add}" method="POST">
