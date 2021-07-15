@@ -5,13 +5,11 @@ import it.polimi.tiw.bean.ArticleBean;
 import it.polimi.tiw.bean.OrderBean;
 import it.polimi.tiw.utils.QueryExecutor;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.Date;
 
 public class OrderDAO {
 
@@ -52,45 +50,48 @@ public class OrderDAO {
 
     public void createOrder(OrderBean orderBean)
             throws SQLException {
+        try {
+            connection.setAutoCommit(false);
 
-        connection.setAutoCommit(false);
+            String query = "INSERT into ecommerce.order (seller_id, user_id, price_articles, price_shipment) VALUES (?, ?, ?, ?)";
+            int orderId;
+            try (PreparedStatement pstatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);) {
+                pstatement.setInt(1, Integer.parseInt(orderBean.getSellerId()));
+                pstatement.setInt(2, Integer.parseInt(orderBean.getUserId()));
+                pstatement.setFloat(3, Float.parseFloat(orderBean.getPriceArticles()));
+                pstatement.setFloat(4, Float.parseFloat(orderBean.getPriceShipment()));
+                int affectedRows = pstatement.executeUpdate();
 
-        String query = "INSERT into ecommerce.order (seller_id, user_id, price_articles, price_shipment) VALUES (?, ?, ?, ?)";
-        int orderId;
-        try (PreparedStatement pstatement = connection.prepareStatement(query);) {
-            pstatement.setInt(1, Integer.parseInt(orderBean.getSellerId()));
-            pstatement.setInt(2, Integer.parseInt(orderBean.getUserId()));
-            pstatement.setFloat(3, Float.parseFloat(orderBean.getPriceArticles()));
-            pstatement.setFloat(4, Float.parseFloat(orderBean.getPriceShipment()));
-            int affectedRows = pstatement.executeUpdate();
-
-            if (affectedRows == 0)
-                throw new SQLException("Creating order failed, no rows affected.");
-            // get order id just created by sql auto increment function
-            try (ResultSet generatedKeys = pstatement.getGeneratedKeys()) {
-                if (generatedKeys.next())
-                    orderId = (int) generatedKeys.getLong(1);
-                else
-                    throw new SQLException("Creating order failed, no ID obtained.");
-            }
-        } catch (SQLException e) {
-            connection.rollback();
-            throw e;
-        }
-        for (ArticleBean articleBean : orderBean.getArticleBeans()) {
-            String query2 = "INSERT into ecommerce.order_article (order_id, article_id, quantity) VALUES (?, ?, ?)";
-            try (PreparedStatement pstatement = connection.prepareStatement(query2);) {
-                pstatement.setInt(1, orderId);
-                pstatement.setInt(2, Integer.parseInt(articleBean.getId()));
-                pstatement.setInt(3, Integer.parseInt(articleBean.getQuantity()));
-                pstatement.executeUpdate();
+                if (affectedRows == 0)
+                    throw new SQLException("Creating order failed, no rows affected.");
+                // get order id just created by sql auto increment function
+                try (ResultSet generatedKeys = pstatement.getGeneratedKeys()) {
+                    if (generatedKeys.next())
+                        orderId = (int) generatedKeys.getLong(1);
+                    else
+                        throw new SQLException("Creating order failed, no ID obtained.");
+                }
             } catch (SQLException e) {
                 connection.rollback();
                 throw e;
             }
+            for (ArticleBean articleBean : orderBean.getArticleBeans()) {
+                String query2 = "INSERT into ecommerce.order_article (order_id, article_id, quantity) VALUES (?, ?, ?)";
+                try (PreparedStatement pstatement = connection.prepareStatement(query2);) {
+                    pstatement.setInt(1, orderId);
+                    pstatement.setInt(2, Integer.parseInt(articleBean.getId()));
+                    pstatement.setInt(3, Integer.parseInt(articleBean.getQuantity()));
+                    pstatement.executeUpdate();
+                } catch (SQLException e) {
+                    connection.rollback();
+                    throw e;
+                }
+            }
+            connection.commit();
+            connection.setAutoCommit(true);
+        }catch (Exception e) {
+            e.printStackTrace();
         }
-        connection.commit();
-        connection.setAutoCommit(true);
     }
 
     private Date generateDateFromString(String date) throws ParseException {

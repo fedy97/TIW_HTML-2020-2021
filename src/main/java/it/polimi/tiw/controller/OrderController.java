@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +27,7 @@ public class OrderController extends GenericServlet {
     private static final Logger log = LoggerFactory.getLogger(OrderController.class.getSimpleName());
 
     private static final String RESULTS_PAGE_PATH = "/orders.html";
-    private static final String ORDERS_CONTEXT_VAR  = "foundOrders";
+    private static final String ORDERS_CONTEXT_VAR = "foundOrders";
 
     public OrderController() {
         super();
@@ -89,7 +88,6 @@ public class OrderController extends GenericServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         Optional<UserBean> user = getUserData(request);
         if (!user.isPresent()) {
             response.sendRedirect(getServletContext().getContextPath() + LOGIN_PAGE_PATH);
@@ -102,7 +100,7 @@ public class OrderController extends GenericServlet {
         boolean isBadRequest = false;
         String sellerId = null;
         try {
-          sellerId = request.getParameter("seller_id");
+            sellerId = request.getParameter("seller_id");
 
         } catch (NumberFormatException | NullPointerException e) {
             isBadRequest = true;
@@ -122,6 +120,7 @@ public class OrderController extends GenericServlet {
             orderBean.setSellerId(sellerId);
             orderBean.setOrderDate(new Date().toString());
             orderBean.setShipmentDate(new Date().toString());
+            System.out.println(orderBean.toString());
             orderDAO.createOrder(orderBean);
         } catch (SQLException sqlException) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to create order");
@@ -130,7 +129,7 @@ public class OrderController extends GenericServlet {
 
         // return the user to the right view
         String ctxpath = getServletContext().getContextPath();
-        String path = ctxpath + "/Home";
+        String path = ctxpath + "/order";
         response.sendRedirect(path);
 
     }

@@ -10,7 +10,7 @@
 <body>
 <div th:replace="fragments/navbar :: navbar"></div>
 <h1>Orders</h1>
-<table th:each="order : ${foundOrders}">
+<table class = "blue-div" th:each="order : ${foundOrders}">
     <thead>
     <tr>
         <th>Seller Name</th>

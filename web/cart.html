@@ -22,10 +22,10 @@
         <tr th:each="seller_article : ${tmp_orders}">
             <td th:text="'Seller:' + ${seller_article.getKey()}"></td>
             <td>
-                <form action="#" th:action="@{/add}" method="POST">
+                <form action="#" th:action="@{/order}" method="POST">
                     <fieldset>
                         <p>
-                            <input type="text" name="seller_id" value="1" required/>
+                            <input type="hidden" name="seller_id" th:value="${seller_article.getKey()}" required/>
                         </p>
                         <input type="submit" name="Add">
                     </fieldset>
