@@ -120,13 +120,15 @@ public class OrderController extends GenericServlet {
             orderBean.setSellerId(sellerId);
             orderBean.setOrderDate(new Date().toString());
             orderBean.setShipmentDate(new Date().toString());
-            System.out.println(orderBean.toString());
             orderDAO.createOrder(orderBean);
         } catch (SQLException sqlException) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to create order");
             return;
         }
-
+        // remove orders from session
+        request.getSession().removeAttribute("orders");
+        request.getSession().removeAttribute("cart");
+        request.getSession().removeAttribute("tmp_orders");
         // return the user to the right view
         String ctxpath = getServletContext().getContextPath();
         String path = ctxpath + "/order";

@@ -94,11 +94,6 @@ public class OrderDAO {
         }
     }
 
-    private Date generateDateFromString(String date) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        return sdf.parse(date);
-    }
-
     private List<ArticleBean> findArticlesByOrderId(String orderId, String sellerId) throws SQLException {
 
         String query = "SELECT A.id, A.name, A.description, A.category, A.photo, A_O.quantity, S_A.price "
