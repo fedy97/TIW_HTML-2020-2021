@@ -12,11 +12,16 @@
                 <div><b> Seller: </b><span th:text="${seller_offer.getSellerName()}"></span></div>
                 <div><b> Price: </b><span th:text="${seller_offer.getPrice()}"></span><span>&#8364;</span></div>
                 <div><b> Rating: </b><span th:text="${seller_offer.getSellerRating()}"></span></div>
-                <div> Free shipping for orders greater than <b
-                        th:text="${seller_offer.getPriceThreshold()}"></b><b>&#8364;</b></div>
             </div>
-            <p th:each="shipping_policy : ${seller_offer.getShippingPolicies()}"></p>
-
+            <br>
+            <div th:each="shipping_policy : ${seller_offer.getShippingPolicies()}">
+                <span th:text="${shipping_policy.getMaxItem()} ? 'For order with articles between ' +  ${shipping_policy.getMinItem()}  + ' and ' + ${shipping_policy.getMaxItem()} + ' the shipping cost is ' + ${shipping_policy.getShipCost() + '\u20AC'}
+                   : 'For more than ' + ${shipping_policy.getMinItem()} + ' articles the shipping is free'"></span>
+                <hr>
+            </div>
+            <div> Free shipping for orders greater than <b
+                    th:text="${seller_offer.getPriceThreshold()}"></b><b>&#8364;</b></div>
+            <br>
             <div><span th:text="${seller_offer.getExistingArticles()} ? 'You have already '+ ${seller_offer.getExistingArticles().getLeft()} + ' for a total of ' + ${seller_offer.getExistingArticles().getRight() + ' euro'}:
             'You do not have articles of this seller in your cart yet'"></span></div>
             <br>

@@ -140,7 +140,10 @@ public class SearchController extends GenericServlet {
     private List<ShippingPolicyBean> getSellerShippingPolicy(String sellerId) throws SQLException {
 
         ShipmentPolicyDAO shipmentPolicyDAO = new ShipmentPolicyDAO(connection);
-        return shipmentPolicyDAO.findPolicyBySellerId(sellerId);
+        List<ShippingPolicyBean> shippingPolicyBeans = shipmentPolicyDAO.findPolicyBySellerId(sellerId);
+
+        log.debug(shippingPolicyBeans.toString());
+        return shippingPolicyBeans;
     }
 
     private Pair<Integer, Float> getExistingArticlesOfSeller(String sellerId, HttpSession session) {
