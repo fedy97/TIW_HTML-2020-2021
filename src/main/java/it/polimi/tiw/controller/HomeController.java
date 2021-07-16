@@ -26,7 +26,6 @@ public class HomeController extends GenericServlet {
     private static final Logger  log                = LoggerFactory.getLogger(HomeController.class.getSimpleName());
 
     private static final String  RESULT_CONTEXT_VAR = "lastArticles";
-    private static final String  RESULTS_PAGE_PATH  = "/home.html";
 
     private static final Integer MAX_PAGE_ARTICLES  = 5;
 
@@ -60,7 +59,7 @@ public class HomeController extends GenericServlet {
             ServletContext servletContext = getServletContext();
             final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
             ctx.setVariable(RESULT_CONTEXT_VAR, lastViewedArticles);
-            templateEngine.process(RESULTS_PAGE_PATH, ctx, resp.getWriter());
+            templateEngine.process(HOME_PAGE_PATH, ctx, resp.getWriter());
         } catch (Exception e) {
             log.error("Something went wrong when extracting last articles. Cause is {}", e.getMessage());
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
