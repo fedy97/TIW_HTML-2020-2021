@@ -23,14 +23,14 @@ import it.polimi.tiw.utils.GenericServlet;
 @WebServlet("/home")
 public class HomeController extends GenericServlet {
 
-    private static final Logger  log                 = LoggerFactory.getLogger(HomeController.class.getSimpleName());
+    private static final Logger  log                = LoggerFactory.getLogger(HomeController.class.getSimpleName());
 
-    private static final String  RESULT_CONTEXT_VAR  = "lastArticles";
-    private static final String  RESULTS_PAGE_PATH   = "/home.html";
+    private static final String  RESULT_CONTEXT_VAR = "lastArticles";
+    private static final String  RESULTS_PAGE_PATH  = "/home.html";
 
-    private static final Integer MAX_PAGE_ARTICLES   = 5;
+    private static final Integer MAX_PAGE_ARTICLES  = 5;
 
-    private static final long    serialVersionUID    = 1L;
+    private static final long    serialVersionUID   = 1L;
 
     public HomeController() {
 
@@ -49,14 +49,17 @@ public class HomeController extends GenericServlet {
         String userId = user.get().getId();
         try {
             log.debug("Searching for last viewed articles of user {}", userId);
-            List<ArticleBean> lastArticles = getLastViewedArticles(userId);
+            List<ArticleBean> lastViewedArticles = getLastViewedArticles(userId);
 
-            if (lastArticles.size() < MAX_PAGE_ARTICLES)
-                lastArticles.addAll(getLastArticles(MAX_PAGE_ARTICLES - lastArticles.size()));
+            if (lastViewedArticles.size() < MAX_PAGE_ARTICLES) {
+                List<ArticleBean> lastArticles = getLastArticles(MAX_PAGE_ARTICLES - lastViewedArticles.size());
+                filterDuplicates(lastViewedArticles, lastArticles);
+                lastViewedArticles.addAll(lastArticles);
+            }
 
             ServletContext servletContext = getServletContext();
             final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
-            ctx.setVariable(RESULT_CONTEXT_VAR, lastArticles);
+            ctx.setVariable(RESULT_CONTEXT_VAR, lastViewedArticles);
             templateEngine.process(RESULTS_PAGE_PATH, ctx, resp.getWriter());
         } catch (Exception e) {
             log.error("Something went wrong when extracting last articles. Cause is {}", e.getMessage());
@@ -76,6 +79,11 @@ public class HomeController extends GenericServlet {
 
         ArticleDAO articleDAO = new ArticleDAO(connection);
         return articleDAO.findLastArticles(articleNumbers);
+    }
+
+    private void filterDuplicates(List<ArticleBean> viewedArticles, List<ArticleBean> lastArticles) {
+
+        viewedArticles.forEach(viewedArticle -> lastArticles.removeIf(el -> el.getId().equals(viewedArticle.getId())));
     }
 
 }

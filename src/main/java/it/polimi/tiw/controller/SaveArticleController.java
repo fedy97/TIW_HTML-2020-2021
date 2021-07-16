@@ -89,7 +89,13 @@ public class SaveArticleController extends GenericServlet {
     private void addSellerArticle(String sellerId, ArticleBean article, Map<String, List<ArticleBean>> savedArticles) {
 
         savedArticles.computeIfAbsent(sellerId, k -> new ArrayList<>());
-        savedArticles.get(sellerId).add(article);
+
+        Optional<ArticleBean> existingEntry = savedArticles.get(sellerId).stream().findFirst();
+        if (existingEntry.isPresent()) {
+            existingEntry.get().setQuantity(Integer.toString(
+                    Integer.parseInt(existingEntry.get().getQuantity()) + Integer.parseInt(article.getQuantity())));
+        } else
+            savedArticles.get(sellerId).add(article);
     }
 
     private String getArticlePrice(String articleId, String sellerId) throws SQLException {

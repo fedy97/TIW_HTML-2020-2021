@@ -2,7 +2,7 @@ table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
     width: 100%;
-    color: #0d36b1;
+    color: #232f3e;
 }
 
 td, th {
@@ -12,5 +12,5 @@ td, th {
 }
 
 table:nth-child(even) {
-    color: #c41c2f;
+    color: #217482;
 }

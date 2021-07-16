@@ -14,7 +14,7 @@
         <div th:replace="fragments/article_details :: article_details"></div>
     </div>
 
-    <div class="article-div blue-div">
+    <div class="article-div blue-div" th:if="!${searched_articles.isEmpty()}">
         <div class="article-title" th:text="'Here what we have found for your search ' + ${param.hint}"></div>
         <div class="item item-blue" th:each="article : ${searched_articles}">
             <div class="item-title" th:text="${article.getName()}">Spray magico</div>
@@ -23,7 +23,7 @@
                 <div><b>Description: </b><span th:text="${article.getDescription()}">It is a fantastic product</span></div>
                 <div><b>Category: </b><span th:text="${article.getCategory()}">Home</span></div>
             </div>
-            <a class="btn btn-blue btn-small btn-primary" th:href="@{/search(article_id=${article.getId()})}">See
+            <a class="btn btn-blue btn-small btn-primary" th:href="@{/search(article_id=${article.getId()}, hint=${param.hint})}">See
                 details</a>
         </div>
     </div>

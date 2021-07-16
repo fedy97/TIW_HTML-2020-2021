@@ -6,6 +6,11 @@ public class ViewEntity {
     private String userId;
     private String articleId;
 
+    public ViewEntity(String userId, String articleId) {
+        this.userId = userId;
+        this.articleId = articleId;
+    }
+
     public String getUserId() {
 
         return userId;

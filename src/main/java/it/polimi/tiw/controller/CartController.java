@@ -1,21 +1,6 @@
 
 package it.polimi.tiw.controller;
 
-import it.polimi.tiw.bean.*;
-import it.polimi.tiw.dao.ArticleDAO;
-import it.polimi.tiw.dao.SellerDAO;
-import it.polimi.tiw.dao.ShipmentPolicyDAO;
-import it.polimi.tiw.utils.GenericServlet;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.thymeleaf.context.WebContext;
-
-import javax.servlet.ServletContext;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -24,12 +9,29 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.servlet.ServletContext;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.thymeleaf.context.WebContext;
+
+import it.polimi.tiw.bean.*;
+import it.polimi.tiw.dao.ArticleDAO;
+import it.polimi.tiw.dao.SellerDAO;
+import it.polimi.tiw.dao.ShipmentPolicyDAO;
+import it.polimi.tiw.utils.GenericServlet;
+
 @WebServlet("/cart")
 public class CartController extends GenericServlet {
 
-    private static final Logger log = LoggerFactory.getLogger(CartController.class.getSimpleName());
+    private static final Logger log              = LoggerFactory.getLogger(CartController.class.getSimpleName());
 
-    private static final long serialVersionUID = 1L;
+    private static final long   serialVersionUID = 1L;
 
     public CartController() {
 
@@ -67,15 +69,20 @@ public class CartController extends GenericServlet {
     }
 
     private Map<String, OrderBean> buildCartModel(Map<String, List<ArticleBean>> articles) {
+
         Map<String, OrderBean> orderBeanMap = new HashMap<>();
-        if (articles == null)
-            return orderBeanMap;
+        if (articles == null) return orderBeanMap;
         log.debug("Articles --> {}", articles);
         log.debug("Articles size --> {}", articles.size());
         articles.forEach((seller, articleList) -> {
             OrderBean orderBean = new OrderBean();
             orderBean.setArticleBeans(articleList);
             orderBean.setSellerId(seller);
+            try {
+                addSellerInfo(seller, orderBean);
+            } catch (SQLException e) {
+                log.error(ExceptionUtils.getStackTrace(e));
+            }
             String priceArticles = computePriceArticles(seller, articleList);
             orderBean.setPriceArticles(priceArticles);
             orderBean.setPriceShipment(Float.toString(
@@ -83,6 +90,14 @@ public class CartController extends GenericServlet {
             orderBeanMap.put(seller, orderBean);
         });
         return orderBeanMap;
+    }
+
+    private void addSellerInfo(String sellerId, OrderBean orderBean) throws SQLException {
+
+        SellerDAO sellerDAO = new SellerDAO(connection);
+        SellerBean seller = sellerDAO.getSellerFromId(sellerId).get();
+        orderBean.setSellerName(seller.getSellerName());
+        orderBean.setSellerRating(seller.getSellerRating());
     }
 
     private String computePriceArticles(String sellerId, List<ArticleBean> articleBeanList) {

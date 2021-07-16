@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletContext;
 import javax.servlet.annotation.WebServlet;
@@ -29,8 +30,10 @@ import it.polimi.tiw.bean.UserBean;
 import it.polimi.tiw.dao.ArticleDAO;
 import it.polimi.tiw.dao.SellerDAO;
 import it.polimi.tiw.dao.ShipmentPolicyDAO;
+import it.polimi.tiw.dao.ViewDAO;
 import it.polimi.tiw.utils.GenericServlet;
 import it.polimi.tiw.utils.Pair;
+import it.polimi.tiw.utils.ViewEntity;
 
 @WebServlet("/search")
 public class SearchController extends GenericServlet {
@@ -79,18 +82,20 @@ public class SearchController extends GenericServlet {
 
         try {
             log.debug("Search keyword {}", keyword);
-            List<ArticleBean> foundArticles = getSearchedArticles(keyword);
+            List<ArticleBean> foundArticles = getSearchedArticles(keyword, articleId);
             ServletContext servletContext = getServletContext();
             final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
-            ctx.setVariable(RESULT_CONTEXT_VAR, foundArticles);
-            ctx.setVariable(HINT_CONTEXT_VAR, keyword);
 
             if (StringUtils.isNotBlank(articleId)) {
+                saveView(req.getSession(), articleId);
                 ctx.setVariable(SHOW_ARTICLE_DETAILS_CONTEXT_VAR, true);
                 getArticleDetails(articleId)
                         .ifPresent(articleBean -> ctx.setVariable(ARTICLE_DETAILS_CONTEXT_VAR, articleBean));
                 addArticleDetails(articleId, ctx, req.getSession());
             }
+
+            ctx.setVariable(RESULT_CONTEXT_VAR, foundArticles);
+            ctx.setVariable(HINT_CONTEXT_VAR, keyword);
 
             templateEngine.process(RESULTS_PAGE_PATH, ctx, resp.getWriter());
         } catch (Exception e) {
@@ -100,6 +105,13 @@ public class SearchController extends GenericServlet {
                     "Something went wrong when searching the specified articles");
         }
 
+    }
+
+    private void saveView(HttpSession session, String articleId) {
+
+        ViewDAO viewDAO = new ViewDAO(connection);
+        UserBean userBean = (UserBean) session.getAttribute(USER_SESSION_ATTRIBUTE);
+        viewDAO.insertView(new ViewEntity(userBean.getId(), articleId));
     }
 
     private Optional<ArticleBean> getArticleDetails(String articleId) throws SQLException {
@@ -148,10 +160,13 @@ public class SearchController extends GenericServlet {
         return existingAmount;
     }
 
-    private List<ArticleBean> getSearchedArticles(String keyword) throws SQLException {
+    private List<ArticleBean> getSearchedArticles(String keyword, String articleId) throws SQLException {
 
         ArticleDAO articleDAO = new ArticleDAO(connection);
-        return articleDAO.findArticleByKeyword(keyword);
+        List<ArticleBean> articleBeanList = articleDAO.findArticleByKeyword(keyword);
+        return StringUtils.isNotBlank(articleId)
+                ? articleBeanList.stream().filter(el -> !articleId.equals(el.getId())).collect(Collectors.toList())
+                : articleBeanList;
     }
 
 }
