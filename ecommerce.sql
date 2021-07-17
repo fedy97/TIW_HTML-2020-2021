@@ -57,7 +57,7 @@ CREATE TABLE `order` (
   `seller_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `price_articles` float,
-  `price_shipment` float, 
+  `price_shipment` float,
   `shipment_date` DATETIME DEFAULT CURRENT_TIMESTAMP,
   `order_date` DATETIME DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -215,7 +215,7 @@ CREATE TABLE `user` (
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
-INSERT INTO `user` VALUES (1,'name1', 'surname1','email1','1234','via lol 1'),(2,'name2', 'surname2','email2','1234','via lol 2');
+INSERT INTO `user` VALUES (1,'name1', 'surname1','email1@mail.com','1234','via lol 1'),(2,'name2', 'surname2','email2@mail.com','1234','via lol 2');
 UNLOCK TABLES;
 
 --

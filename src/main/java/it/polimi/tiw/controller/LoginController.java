@@ -4,6 +4,8 @@ package it.polimi.tiw.controller;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
 import javax.servlet.annotation.WebServlet;
@@ -47,6 +49,11 @@ public class LoginController extends GenericServlet {
             if (StringUtils.isBlank(usrn) || StringUtils.isBlank(pwd)) {
                 throw new Exception("Missing or empty credential value");
             }
+            String regex = "^(.+)@(.+)$";
+            Pattern pattern = Pattern.compile(regex);
+            Matcher matcher = pattern.matcher(usrn);
+            if (!matcher.matches())
+                throw new Exception("Not a valid email");
 
         } catch (Exception e) {
             log.error("Something went wrong when extracting login form parameters. Cause is {}", e.getMessage());
