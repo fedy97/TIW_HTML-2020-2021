@@ -20,8 +20,8 @@
             <div class="item-title" th:text="${article.getName()}">Spray magico</div>
             <img th:src="${article.getPhoto()}">
             <div class="item-data">
-                <div><b>Description: </b><span th:text="${article.getDescription()}">It is a fantastic product</span></div>
-                <div><b>Category: </b><span th:text="${article.getCategory()}">Home</span></div>
+                <div><b>Code: </b><span th:text="${article.getId()}">1</span></div>
+                <div><b>Min price: </b><span th:text="${article.getPrice()}">Home</span><b>&#8364;</b></div>
             </div>
             <a class="btn btn-blue btn-small btn-primary" th:href="@{/search(article_id=${article.getId()}, hint=${param.hint})}">See
                 details</a>

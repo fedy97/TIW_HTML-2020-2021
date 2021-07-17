@@ -30,7 +30,7 @@
                 <input type="hidden" name="seller_id" th:value="${seller_offer.getSellerId()}" required/>
                 <div class="form-group">
                     <label for="article_qty">Qty</label>
-                    <input  id="article_qty" type="text" name="article_qty" value="1" required/>
+                    <input  id="article_qty" type="number" name="article_qty" value="1" min="1" step="1" required/>
                 </div>
                 <button class="btn btn-large btn-blue btn-primary" type="submit">Add</button>
             </form>

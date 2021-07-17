@@ -33,7 +33,8 @@ public class ArticleDAO {
 
     public List<ArticleBean> findArticleByKeyword(String keyword) throws SQLException {
 
-        String query = "SELECT * FROM article WHERE name like :keyword or description like :keyword";
+        String query = "SELECT article.*, MIN(price) as price FROM article INNER JOIN seller_article ON (id = article_id) WHERE name like :keyword or description like :keyword " +
+                "GROUP BY article.id, article.name, article.description, article.category, article.photo, article.insr_ts ORDER BY price";
         Map<String, Object> queryParam = new HashMap<>();
         queryParam.put("keyword", "%" + keyword + "%");
         return queryExecutor.select(query, queryParam, ArticleBean.class);
@@ -54,11 +55,12 @@ public class ArticleDAO {
     }
 
     public Float getArticlePrice(String sellerId, String articleId) throws SQLException {
+
         String query = "SELECT * FROM article INNER JOIN seller_article ON (id = article_id) WHERE article_id=:article_id AND seller_id=:seller_id";
         Map<String, Object> queryParam = new HashMap<>();
-        queryParam.put("seller_id",sellerId);
+        queryParam.put("seller_id", sellerId);
         queryParam.put("article_id", articleId);
-        List<ArticleBean> articles =  queryExecutor.select(query, queryParam, ArticleBean.class);
+        List<ArticleBean> articles = queryExecutor.select(query, queryParam, ArticleBean.class);
         if (articles.size() == 1) return Float.parseFloat(articles.get(0).getPrice());
         else
             return 0F;
