@@ -57,7 +57,7 @@ public class LoginController extends GenericServlet {
 
         } catch (Exception e) {
             log.error("Something went wrong when extracting login form parameters. Cause is {}", e.getMessage());
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing credential value");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
             return;
         }
 
