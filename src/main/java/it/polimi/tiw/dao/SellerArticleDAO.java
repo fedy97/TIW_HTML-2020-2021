@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import it.polimi.tiw.utils.QueryExecutor;
-import it.polimi.tiw.utils.SellerArticleEntry;
+import it.polimi.tiw.utils.SellerArticleEntity;
 
 public class SellerArticleDAO {
 
@@ -20,14 +20,14 @@ public class SellerArticleDAO {
         queryExecutor = new QueryExecutor(connection);
     }
 
-    public Optional<SellerArticleEntry> findEntry(String articleId, String sellerId) throws SQLException {
+    public Optional<SellerArticleEntity> findEntry(String articleId, String sellerId) throws SQLException {
 
         String query = "SELECT * FROM seller_article  WHERE article_id=:article_id and seller_id=:seller_id";
         Map<String, Object> queryParam = new HashMap<>();
         queryParam.put("article_id", articleId);
         queryParam.put("seller_id", sellerId);
-        List<SellerArticleEntry> sellerArticleEntries = queryExecutor.select(query, queryParam,
-                SellerArticleEntry.class);
+        List<SellerArticleEntity> sellerArticleEntries = queryExecutor.select(query, queryParam,
+                SellerArticleEntity.class);
 
         if (sellerArticleEntries.size() == 1) return Optional.of(sellerArticleEntries.get(0));
         else

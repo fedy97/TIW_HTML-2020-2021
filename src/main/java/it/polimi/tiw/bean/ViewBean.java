@@ -1,6 +1,6 @@
 package it.polimi.tiw.bean;
 
-public class UserArticleBean {
+public class ViewBean {
 
     String userId;
     String articleId;

@@ -15,9 +15,9 @@ public class ViewDAO {
         queryExecutor = new QueryExecutor(connection);
     }
 
-    public void insertView(ViewEntity view) {
+    public void insertView(ViewEntity viewEntity) {
 
-        queryExecutor.insert("user_article", view);
+        queryExecutor.insert("user_article", viewEntity);
     }
 
 }

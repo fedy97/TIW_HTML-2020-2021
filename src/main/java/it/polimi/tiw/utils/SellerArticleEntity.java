@@ -1,7 +1,7 @@
 
 package it.polimi.tiw.utils;
 
-public class SellerArticleEntry {
+public class SellerArticleEntity {
 
     private String sellerId;
     private String articleId;

@@ -21,7 +21,7 @@ import it.polimi.tiw.bean.UserBean;
 import it.polimi.tiw.dao.ArticleDAO;
 import it.polimi.tiw.dao.SellerArticleDAO;
 import it.polimi.tiw.utils.GenericServlet;
-import it.polimi.tiw.utils.SellerArticleEntry;
+import it.polimi.tiw.utils.SellerArticleEntity;
 
 @WebServlet("/add")
 public class SaveArticleController extends GenericServlet {
@@ -100,7 +100,7 @@ public class SaveArticleController extends GenericServlet {
 
     private String getArticlePrice(String articleId, String sellerId) throws SQLException {
 
-        Optional<SellerArticleEntry> sellerArticleEntry = new SellerArticleDAO(connection).findEntry(articleId,
+        Optional<SellerArticleEntity> sellerArticleEntry = new SellerArticleDAO(connection).findEntry(articleId,
                 sellerId);
         if (sellerArticleEntry.isPresent()) return sellerArticleEntry.get().getPrice();
         return "";

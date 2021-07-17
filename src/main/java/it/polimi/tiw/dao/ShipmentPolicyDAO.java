@@ -32,7 +32,7 @@ public class ShipmentPolicyDAO {
             return Optional.empty();
     }
 
-    public List<ShippingPolicyBean> findPolicyBySellerId(String sellerId) throws SQLException {
+    public List<ShippingPolicyBean> findPoliciesBySellerId(String sellerId) throws SQLException {
 
         String query = "SELECT * FROM shipping_policy WHERE seller_id=:seller_id";
         Map<String, Object> queryParam = new HashMap<>();
