@@ -27,6 +27,8 @@
                 details</a>
         </div>
     </div>
+    <div class="article-div article-title blue-div" th:if="${searched_articles.isEmpty()}" th:text="'No Articles were found with the keyword ' + ${param.hint}">
+    </div>
 
 </body>
 </html>
