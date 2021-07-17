@@ -15,8 +15,8 @@
             </div>
             <br>
             <div th:each="shipping_policy : ${seller_offer.getShippingPolicies()}">
-                <span th:text="${shipping_policy.getMaxItem()} ? 'For order with articles between ' +  ${shipping_policy.getMinItem()}  + ' and ' + ${shipping_policy.getMaxItem()} + ' the shipping cost is ' + ${shipping_policy.getShipCost() + '\u20AC'}
-                   : 'For more than ' + ${shipping_policy.getMinItem()} + ' articles the shipping is free'"></span>
+                <span th:if="!${shipping_policy.getMaxItem()}" th:text="'For more than ' + ${shipping_policy.getMinItem()} + ' articles the shipping is free'"}></span>
+                <span th:if="${shipping_policy.getMaxItem()}"><span th:text="'For order with articles between ' +  ${shipping_policy.getMinItem()}  + ' and ' + ${shipping_policy.getMaxItem()} + ' the shipping cost is ' + ${shipping_policy.getShipCost()}"></span><span>&#8364;</span></span>
                 <hr>
             </div>
             <div> Free shipping for orders greater than <b
