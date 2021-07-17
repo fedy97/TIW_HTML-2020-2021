@@ -26,8 +26,11 @@ public class GenericServlet extends HttpServlet {
     protected static final String CART_PAGE_PATH         = "/cart.html";
 
     protected static final String CART_CONTROLLER_PATH   = "/cart";
+    protected static final String ORDER_CONTROLLER_PATH = "/order";
 
     protected static final String CART_SESSION_VAR       = "cart";
+    protected static final String TMP_ORDERS_SESSION_VAR = "tmp_orders";
+
     protected static final String CART_CONTEXT_VAR       = "tmp_orders";
 
     private static final long     serialVersionUID       = 1L;

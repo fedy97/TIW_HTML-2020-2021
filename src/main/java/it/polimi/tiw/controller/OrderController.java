@@ -1,19 +1,6 @@
 
 package it.polimi.tiw.controller;
 
-import it.polimi.tiw.bean.OrderBean;
-import it.polimi.tiw.bean.UserBean;
-import it.polimi.tiw.dao.OrderDAO;
-import it.polimi.tiw.utils.GenericServlet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.thymeleaf.context.WebContext;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
@@ -21,20 +8,39 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.thymeleaf.context.WebContext;
+
+import it.polimi.tiw.bean.ArticleBean;
+import it.polimi.tiw.bean.OrderBean;
+import it.polimi.tiw.bean.UserBean;
+import it.polimi.tiw.dao.OrderDAO;
+import it.polimi.tiw.utils.GenericServlet;
+
 @WebServlet("/order")
 public class OrderController extends GenericServlet {
 
-    private static final Logger log = LoggerFactory.getLogger(OrderController.class.getSimpleName());
+    private static final Logger log                = LoggerFactory.getLogger(OrderController.class.getSimpleName());
 
-    private static final String RESULTS_PAGE_PATH = "/orders.html";
+    private static final String RESULTS_PAGE_PATH  = "/orders.html";
     private static final String ORDERS_CONTEXT_VAR = "foundOrders";
 
     public OrderController() {
+
         super();
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
         // get and check params
         String orderId = null;
 
@@ -80,14 +86,15 @@ public class OrderController extends GenericServlet {
                 templateEngine.process(RESULTS_PAGE_PATH, ctx, resp.getWriter());
             }
         } catch (Exception e) {
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                    e.getMessage());
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         }
 
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
         Optional<UserBean> user = getUserData(request);
         if (!user.isPresent()) {
             response.sendRedirect(getServletContext().getContextPath() + LOGIN_PAGE_PATH);
@@ -113,8 +120,9 @@ public class OrderController extends GenericServlet {
 
         // Create mission in DB
         OrderDAO orderDAO = new OrderDAO(connection);
+        Map<String, OrderBean> orders;
         try {
-            Map<String, OrderBean> orders = (Map<String, OrderBean>) request.getSession().getAttribute("orders");
+            orders = (Map<String, OrderBean>) request.getSession().getAttribute(TMP_ORDERS_SESSION_VAR);
             OrderBean orderBean = orders.get(sellerId);
             orderBean.setUserId(userId);
             orderBean.setSellerId(sellerId);
@@ -126,23 +134,32 @@ public class OrderController extends GenericServlet {
             return;
         }
         // remove orders from session
-        request.getSession().removeAttribute("orders");
-        request.getSession().removeAttribute("cart");
-        request.getSession().removeAttribute("tmp_orders");
+        orders.remove(sellerId);
+        request.getSession().setAttribute(TMP_ORDERS_SESSION_VAR, orders);
+        removeOrderFromCart(request.getSession(), sellerId);
+
         // return the user to the right view
-        String ctxpath = getServletContext().getContextPath();
-        String path = ctxpath + "/order";
-        response.sendRedirect(path);
+        response.sendRedirect(getServletContext().getContextPath() + ORDER_CONTROLLER_PATH);
 
     }
 
     private List<OrderBean> getOrder(String id) throws SQLException {
+
         OrderDAO orderDAO = new OrderDAO(connection);
         return orderDAO.findOrderById(id);
     }
 
     private List<OrderBean> getOrders(String userId) throws SQLException {
+
         OrderDAO orderDAO = new OrderDAO(connection);
         return orderDAO.findOrders(userId);
+    }
+
+    private void removeOrderFromCart(HttpSession session, String sellerId) {
+
+        Map<String, List<ArticleBean>> savedArticles = (Map<String, List<ArticleBean>>) session
+                .getAttribute(CART_SESSION_VAR);
+        savedArticles.remove(sellerId);
+        session.setAttribute(CART_SESSION_VAR, savedArticles);
     }
 }

@@ -9,8 +9,10 @@
 <body>
 <div th:replace="fragments/navbar :: navbar"></div>
 
-<div class="article-div blue-div" th:if="!${tmp_orders.isEmpty()}">
-    <div class="article-title">Here you can find your cart articles</div>
+<div class="article-div blue-div">
+    <div class="article-title" th:if="!${tmp_orders.isEmpty()}">Here you can find your cart articles</div>
+    <div class="article-title" th:if="${tmp_orders.isEmpty()}">No articles in your cart yet. Go shopping!</div>
+
     <div class="item item-blue" th:each="seller_article : ${tmp_orders}">
         <div class="item-title" th:text="${seller_article.getValue().getSellerName()}">Fornitore</div>
 

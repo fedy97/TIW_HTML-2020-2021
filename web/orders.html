@@ -24,8 +24,8 @@
     <tbody>
     <tr>
         <td th:text="${order.sellerName}"></td>
-        <td th:text="${order.priceArticles}"></td>
-        <td th:text="${order.priceShipment}"></td>
+        <td><span th:text="${order.priceArticles}"></span><span>&#8364;</span></td>
+        <td><span th:text="${order.priceShipment}"></span><span>&#8364;</span></td>
         <td th:text="${order.orderDate}"></td>
         <td th:text="${order.shipmentDate}"></td>
         <td th:text="${order.shipmentAddr}"></td>
@@ -38,7 +38,7 @@
     <tr th:each="article : ${order.getArticleBeans()}">
         <td th:text="${article.getName()}"></td>
         <td th:text="${article.getQuantity()}"></td>
-        <td th:text="${article.getPrice()}"></td>
+        <td><span th:text="${article.getPrice()}"></span><span>&#8364;</span></td>
     </tr>
     </tbody>
     <br><br>
