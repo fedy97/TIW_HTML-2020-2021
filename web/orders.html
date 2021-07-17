@@ -19,6 +19,7 @@
         <th>Seller Name</th>
         <th>Price Articles</th>
         <th>Price Shipment</th>
+        <th>Total Price</th>
         <th>Order Date</th>
         <th>Shipment Date</th>
         <th>Shipment Address</th>
@@ -29,6 +30,7 @@
         <td th:text="${order.sellerName}"></td>
         <td><span th:text="${order.priceArticles}"></span><span>&#8364;</span></td>
         <td><span th:text="${order.priceShipment}"></span><span>&#8364;</span></td>
+        <td><span th:text="${order.priceTotal}"></span><span>&#8364;</span></td>
         <td th:text="${order.orderDate}"></td>
         <td th:text="${order.shipmentDate}"></td>
         <td th:text="${order.shipmentAddr}"></td>

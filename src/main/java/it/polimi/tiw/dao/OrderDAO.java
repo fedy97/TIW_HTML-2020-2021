@@ -43,8 +43,11 @@ public class OrderDAO {
         Map<String, Object> queryParam = new HashMap<>();
         queryParam.put("userId", userId);
         List<OrderBean> result = queryExecutor.select(query, queryParam, OrderBean.class);
-        for (OrderBean orderBean : result)
+        for (OrderBean orderBean : result) {
             orderBean.setArticleBeans(findArticlesByOrderId(orderBean.getId(), orderBean.getSellerId()));
+            float total = Float.parseFloat(orderBean.getPriceShipment()) + Float.parseFloat(orderBean.getPriceArticles());
+            orderBean.setPriceTotal(Float.toString(total));
+        }
         return result;
     }
 

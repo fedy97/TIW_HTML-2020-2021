@@ -19,6 +19,7 @@ public class OrderBean implements Serializable {
     private String            email;
     private String            shipmentAddr;
     private String            orderDate;
+    private String priceTotal;
     private List<ArticleBean> articleBeans;
 
     public String getId() {
@@ -161,14 +162,32 @@ public class OrderBean implements Serializable {
         this.articleBeans = articleBeans;
     }
 
+    public String getPriceTotal() {
+        return priceTotal;
+    }
+
+    public void setPriceTotal(String priceTotal) {
+        this.priceTotal = priceTotal;
+    }
+
     @Override
     public String toString() {
-
-        return "OrderBean{" + "id='" + id + '\'' + ", sellerId='" + sellerId + '\'' + ", priceArticles='"
-                + priceArticles + '\'' + ", priceShipment='" + priceShipment + '\'' + ", shipmentDate='" + shipmentDate
-                + '\'' + ", userId='" + userId + '\'' + ", sellerName='" + sellerName + '\'' + ", sellerRating='"
-                + sellerRating + '\'' + ", name='" + name + '\'' + ", surname='" + surname + '\'' + ", email='" + email
-                + '\'' + ", shipmentAddr='" + shipmentAddr + '\'' + ", orderDate='" + orderDate + '\''
-                + ", articleBeans=" + articleBeans + '}';
+        return "OrderBean{" +
+                "id='" + id + '\'' +
+                ", sellerId='" + sellerId + '\'' +
+                ", priceArticles='" + priceArticles + '\'' +
+                ", priceShipment='" + priceShipment + '\'' +
+                ", shipmentDate='" + shipmentDate + '\'' +
+                ", userId='" + userId + '\'' +
+                ", sellerName='" + sellerName + '\'' +
+                ", sellerRating='" + sellerRating + '\'' +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", email='" + email + '\'' +
+                ", shipmentAddr='" + shipmentAddr + '\'' +
+                ", orderDate='" + orderDate + '\'' +
+                ", priceTotal='" + priceTotal + '\'' +
+                ", articleBeans=" + articleBeans +
+                '}';
     }
 }
