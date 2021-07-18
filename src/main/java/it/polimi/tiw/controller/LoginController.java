@@ -49,7 +49,7 @@ public class LoginController extends GenericServlet {
             if (StringUtils.isBlank(usrn) || StringUtils.isBlank(pwd)) {
                 throw new Exception("Missing or empty credential value");
             }
-            String regex = "^(.+)@(.+)$";
+            String regex = "^([_a-zA-Z0-9-]+(\\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*(\\.[a-zA-Z]{1,6}))?$";
             Pattern pattern = Pattern.compile(regex);
             Matcher matcher = pattern.matcher(usrn);
             if (!matcher.matches())

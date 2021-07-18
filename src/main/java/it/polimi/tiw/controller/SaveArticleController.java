@@ -63,7 +63,7 @@ public class SaveArticleController extends GenericServlet {
         } catch (Exception e) {
             log.error("Something went wrong when extracting article id or qty parameter. Cause is {}",
                     ExceptionUtils.getStackTrace(e));
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing or empty required parameters");
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing or bad formatted required parameters");
             return;
         }
 
