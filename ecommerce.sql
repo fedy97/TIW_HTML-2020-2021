@@ -29,7 +29,7 @@ CREATE TABLE `article` (
   `name` varchar(45) NOT NULL,
   `description` varchar(300) NOT NULL,
   `category` varchar(45) NOT NULL,
-  `photo` varchar(100) NOT NULL,
+  `photo` varchar(300) NOT NULL,
   `insr_ts` DATETIME DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -42,7 +42,7 @@ CREATE TABLE `article` (
 LOCK TABLES `article` WRITE;
 /*!40000 ALTER TABLE `article` DISABLE KEYS */;
 /*!40000 ALTER TABLE `article` ENABLE KEYS */;
-INSERT INTO `article` (`name`, `description`, `category`, `photo`) VALUES ('art1', 'descr1', 'cat1', 'photo1'),('art2', 'descr2', 'cat2', 'photo2');
+INSERT INTO `article` (`name`, `description`, `category`, `photo`) VALUES ('art1', 'descr1', 'auto', 'https://nitrocdn.com/OQDxEgnGVqsKJxRgoEXKxmixsoIRJiBp/assets/static/optimized/rev-fbed1aa/dipcrew.dk/wp-content/uploads/2021/01/f2ef02a212e41b36b8b9504b8cc65284.32.png'),('art2', 'descr2', 'auto', 'https://nitrocdn.com/OQDxEgnGVqsKJxRgoEXKxmixsoIRJiBp/assets/static/optimized/rev-fbed1aa/dipcrew.dk/wp-content/uploads/2021/01/f2ef02a212e41b36b8b9504b8cc65284.32.png');
 UNLOCK TABLES;
 
 --
