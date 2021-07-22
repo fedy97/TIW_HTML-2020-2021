@@ -6,7 +6,7 @@
         <li><a class="active" th:href="@{/home}">Home</a></li>
         <li><a th:href="@{/cart}">Cart</a></li>
         <li><a th:href="@{/order}">Orders</a></li>
-        <li style="float:right"><a th:text="${ session.user.name + ' ' + session.user.surname}"></a></li>
+        <li style="float:right"><a th:text="${session.user.email}"></a></li>
         <li style="float:right"><a th:href="@{/logout}">Logout</a></li>
     </ul>
 
