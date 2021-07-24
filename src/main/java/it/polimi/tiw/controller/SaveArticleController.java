@@ -89,7 +89,8 @@ public class SaveArticleController extends GenericServlet {
 
         savedArticles.computeIfAbsent(sellerId, k -> new ArrayList<>());
 
-        Optional<ArticleBean> existingEntry = savedArticles.get(sellerId).stream().findFirst();
+        Optional<ArticleBean> existingEntry = savedArticles.get(sellerId).stream()
+                .filter(entry -> entry.getId().equals(article.getId())).findFirst();
         if (existingEntry.isPresent()) {
             existingEntry.get().setQuantity(Integer.toString(
                     Integer.parseInt(existingEntry.get().getQuantity()) + Integer.parseInt(article.getQuantity())));

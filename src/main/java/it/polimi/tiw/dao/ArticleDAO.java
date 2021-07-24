@@ -50,7 +50,7 @@ public class ArticleDAO {
 
     public List<ArticleBean> findLastArticles(Integer articlesNumber) throws SQLException {
 
-        String query = "SELECT * FROM article WHERE category='auto' ORDER BY insr_ts DESC LIMIT " + articlesNumber;
+        String query = "SELECT * FROM article WHERE category='Accessori auto' ORDER BY insr_ts DESC LIMIT " + articlesNumber;
         return queryExecutor.select(query, new HashMap<>(), ArticleBean.class);
     }
 
