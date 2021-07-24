@@ -3,6 +3,7 @@ package it.polimi.tiw.controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -16,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -72,10 +72,12 @@ public class SearchController extends GenericServlet {
         String articleId;
         try {
             keyword = escapeSQL(req.getParameter(HINT_ATTRIBUTE));
-            articleId = req.getParameter(ARTICLE_ID_ATTRIBUTE);
-
+            articleId = escapeSQL(req.getParameter(ARTICLE_ID_ATTRIBUTE));
+            if (StringUtils.isBlank(keyword) && StringUtils.isBlank(articleId))
+                throw new Exception("At least one parameter must be different from null");
         } catch (Exception e) {
-            log.error("Something went wrong when extracting search hint parameters. Cause is {}", e.getMessage());
+            log.error("Something went wrong when extracting search hint parameters. Cause is {}",
+                    ExceptionUtils.getStackTrace(e));
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Malformed parameters");
             return;
         }
@@ -165,6 +167,7 @@ public class SearchController extends GenericServlet {
 
     private List<ArticleBean> getSearchedArticles(String keyword, String articleId) throws SQLException {
 
+        if (StringUtils.isBlank(keyword)) return new ArrayList<>();
         ArticleDAO articleDAO = new ArticleDAO(connection);
         List<ArticleBean> articleBeanList = articleDAO.findArticleByKeyword(keyword);
         return StringUtils.isNotBlank(articleId)

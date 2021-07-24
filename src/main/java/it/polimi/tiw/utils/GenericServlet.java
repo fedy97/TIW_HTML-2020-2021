@@ -26,7 +26,7 @@ public class GenericServlet extends HttpServlet {
     protected static final String CART_PAGE_PATH         = "/cart.html";
 
     protected static final String CART_CONTROLLER_PATH   = "/cart";
-    protected static final String ORDER_CONTROLLER_PATH = "/order";
+    protected static final String ORDER_CONTROLLER_PATH  = "/order";
 
     protected static final String CART_SESSION_VAR       = "cart";
     protected static final String TMP_ORDERS_SESSION_VAR = "tmp_orders";
@@ -74,8 +74,9 @@ public class GenericServlet extends HttpServlet {
 
     }
 
-    protected String escapeSQL(String sql){
-        return sql.replace("'", "\"").replace(";", "");
+    protected String escapeSQL(String sql) {
+
+        return sql == null ? null : sql.replace("'", "\"").replace(";", "");
     }
 
 }

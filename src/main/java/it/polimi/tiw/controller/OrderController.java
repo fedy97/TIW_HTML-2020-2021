@@ -129,18 +129,17 @@ public class OrderController extends GenericServlet {
             orderBean.setOrderDate(new Date().toString());
             orderBean.setShipmentDate(new Date().toString());
             orderDAO.createOrder(orderBean);
+            // remove orders from session
+            orders.remove(sellerId);
+            request.getSession().setAttribute(TMP_ORDERS_SESSION_VAR, orders);
+            removeOrderFromCart(request.getSession(), sellerId);
         } catch (SQLException sqlException) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to create order");
             return;
         }
-        // remove orders from session
-        orders.remove(sellerId);
-        request.getSession().setAttribute(TMP_ORDERS_SESSION_VAR, orders);
-        removeOrderFromCart(request.getSession(), sellerId);
 
         // return the user to the right view
         response.sendRedirect(getServletContext().getContextPath() + ORDER_CONTROLLER_PATH);
-
     }
 
     private List<OrderBean> getOrder(String id) throws SQLException {
