@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -53,8 +52,8 @@ public class SaveArticleController extends GenericServlet {
         String sellerId;
         Integer qty;
         try {
-            articleId = StringEscapeUtils.escapeJava(req.getParameter(ARTICLE_ID_FORM_DATA));
-            sellerId = StringEscapeUtils.escapeJava(req.getParameter(SELLER_ID_FORM_DATA));
+            articleId = escapeSQL(req.getParameter(ARTICLE_ID_FORM_DATA));
+            sellerId = escapeSQL(req.getParameter(SELLER_ID_FORM_DATA));
             qty = Integer.parseInt(req.getParameter(ARTICLE_QTY_FORM_DATA));
             if (StringUtils.isBlank(articleId)) {
                 throw new Exception("Undefined article id or qty");

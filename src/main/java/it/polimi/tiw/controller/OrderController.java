@@ -107,7 +107,7 @@ public class OrderController extends GenericServlet {
         boolean isBadRequest = false;
         String sellerId = null;
         try {
-            sellerId = request.getParameter("seller_id");
+            sellerId = escapeSQL(request.getParameter("seller_id"));
 
         } catch (NumberFormatException | NullPointerException e) {
             isBadRequest = true;

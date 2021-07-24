@@ -74,4 +74,8 @@ public class GenericServlet extends HttpServlet {
 
     }
 
+    protected String escapeSQL(String sql){
+        return sql.replace("'", "\"").replace(";", "");
+    }
+
 }

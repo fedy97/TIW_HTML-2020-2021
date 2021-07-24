@@ -71,7 +71,7 @@ public class SearchController extends GenericServlet {
         String keyword;
         String articleId;
         try {
-            keyword = StringEscapeUtils.escapeJava(req.getParameter(HINT_ATTRIBUTE));
+            keyword = escapeSQL(req.getParameter(HINT_ATTRIBUTE));
             articleId = req.getParameter(ARTICLE_ID_ATTRIBUTE);
 
         } catch (Exception e) {
