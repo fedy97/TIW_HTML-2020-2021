@@ -78,7 +78,7 @@ public class SearchController extends GenericServlet {
         } catch (Exception e) {
             log.error("Something went wrong when extracting search hint parameters. Cause is {}",
                     ExceptionUtils.getStackTrace(e));
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Malformed parameters");
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Malformed or missing parameters");
             return;
         }
 
