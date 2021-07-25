@@ -55,9 +55,13 @@ public class SaveArticleController extends GenericServlet {
             articleId = escapeSQL(req.getParameter(ARTICLE_ID_FORM_DATA));
             sellerId = escapeSQL(req.getParameter(SELLER_ID_FORM_DATA));
             qty = Integer.parseInt(req.getParameter(ARTICLE_QTY_FORM_DATA));
-            if (StringUtils.isBlank(articleId)) {
-                throw new Exception("Undefined article id or qty");
+            if (StringUtils.isBlank(articleId) || StringUtils.isBlank(sellerId)) {
+                throw new Exception("Undefined article id or sellerId");
             }
+
+            if(qty < 1)
+                throw new Exception("Invalid quantity. Quantity must be a positive number");
+
 
         } catch (Exception e) {
             log.error("Something went wrong when extracting article id or qty parameter. Cause is {}",

@@ -9,12 +9,12 @@ import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.thymeleaf.context.WebContext;
@@ -41,9 +41,6 @@ public class OrderController extends GenericServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-        // get and check params
-        String orderId = null;
-
         Optional<UserBean> user = getUserData(req);
         if (!user.isPresent()) {
             resp.sendRedirect(getServletContext().getContextPath() + LOGIN_PAGE_PATH);
@@ -51,13 +48,8 @@ public class OrderController extends GenericServlet {
         }
 
         String userId = user.get().getId();
+        String orderId = req.getParameter("order-id");
 
-        try {
-            orderId = req.getParameter("order-id");
-        } catch (NumberFormatException | NullPointerException e) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect param values");
-            return;
-        }
         try {
             if (orderId != null) {
                 // get order by id
@@ -92,8 +84,7 @@ public class OrderController extends GenericServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         Optional<UserBean> user = getUserData(request);
         if (!user.isPresent()) {
@@ -104,16 +95,9 @@ public class OrderController extends GenericServlet {
         String userId = user.get().getId();
 
         // Get and parse all parameters from request
-        boolean isBadRequest = false;
-        String sellerId = null;
-        try {
-            sellerId = escapeSQL(request.getParameter("seller_id"));
+        String sellerId = escapeSQL(request.getParameter("seller_id"));
 
-        } catch (NumberFormatException | NullPointerException e) {
-            isBadRequest = true;
-            e.printStackTrace();
-        }
-        if (isBadRequest) {
+        if (StringUtils.isBlank(sellerId)) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect or missing param values");
             return;
         }
@@ -124,6 +108,12 @@ public class OrderController extends GenericServlet {
         try {
             orders = (Map<String, OrderBean>) request.getSession().getAttribute(TMP_ORDERS_SESSION_VAR);
             OrderBean orderBean = orders.get(sellerId);
+
+            if (orderBean == null) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid seller reference");
+                return;
+            }
+
             orderBean.setUserId(userId);
             orderBean.setSellerId(sellerId);
             orderBean.setOrderDate(new Date().toString());
