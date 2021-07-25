@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import it.polimi.tiw.dao.SellerDAO;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -115,6 +116,12 @@ public class OrderController extends GenericServlet {
             }
 
             orderBean.setUserId(userId);
+
+            if(!isValidSeller(sellerId)){
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid seller id");
+                return;
+            }
+
             orderBean.setSellerId(sellerId);
             orderBean.setOrderDate(new Date().toString());
             orderBean.setShipmentDate(new Date().toString());
@@ -142,6 +149,11 @@ public class OrderController extends GenericServlet {
 
         OrderDAO orderDAO = new OrderDAO(connection);
         return orderDAO.findOrders(userId);
+    }
+
+    private boolean isValidSeller(String sellerId) throws SQLException {
+        SellerDAO sellerDAO = new SellerDAO(connection);
+        return sellerDAO.getSellerFromId(sellerId).isPresent();
     }
 
     private void removeOrderFromCart(HttpSession session, String sellerId) {
