@@ -3,6 +3,7 @@
         <div class="item-title" th:text="${article.getName()}">Spray magico</div>
         <img th:src="${article.getPhoto()}">
         <div class="item-data">
+            <div><b>Code: </b><span th:text="${article.getId()}">1</span></div>
             <div><b>Description: </b><span th:text="${article.getDescription()}">It is a fantastic product</span></div>
             <div><b>Category: </b><span th:text="${article.getCategory()}">Home</span></div>
         </div>
@@ -15,14 +16,14 @@
             </div>
             <br>
             <div th:each="shipping_policy : ${seller_offer.getShippingPolicies()}">
-                <span th:if="!${shipping_policy.getMaxItem()}" th:text="'For more than ' + ${shipping_policy.getMinItem()} + ' articles the shipping is free'"}></span>
+                <span th:if="!${shipping_policy.getMaxItem()}" th:text="'For ' + ${shipping_policy.getMinItem()} + ' articles or more the shipping is free'"}></span>
                 <span th:if="${shipping_policy.getMaxItem()}"><span th:text="'For order with articles between ' +  ${shipping_policy.getMinItem()}  + ' and ' + ${shipping_policy.getMaxItem()} + ' the shipping cost is ' + ${shipping_policy.getShipCost()}"></span><span>&#8364;</span></span>
                 <hr>
             </div>
             <div> Free shipping for orders greater than <b
                     th:text="${seller_offer.getPriceThreshold()}"></b><b>&#8364;</b></div>
             <br>
-            <div><span th:text="${seller_offer.getExistingArticles()} ? 'You have already '+ ${seller_offer.getExistingArticles().getLeft()} + ' for a total of ' + ${seller_offer.getExistingArticles().getRight() + ' euro'}:
+            <div><span th:text="${seller_offer.getExistingArticles()} ? 'You have already '+ ${seller_offer.getExistingArticles().getLeft()} + ' article/s for a total of ' + ${seller_offer.getExistingArticles().getRight() + ' euro'}:
             'You do not have articles of this seller in your cart yet'"></span></div>
             <br>
             <form class="add-article-form" action="#" th:action="@{/add}" method="POST">

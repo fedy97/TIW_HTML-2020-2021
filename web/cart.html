@@ -19,6 +19,7 @@
         <!--            <div class="item item-blue" >-->
         <div class="item-data" th:each="article : ${seller_article.getValue().getArticleBeans()}">
             <div><b> Article: </b><span th:text="${article.getName()}"></span></div>
+            <div><b> Code: </b><span th:text="${article.getId()}"></span></div>
             <div><b> Price: </b><span th:text="${article.getPrice()}"></span><span>&#8364;</span></div>
             <div><b> Qty: </b><span th:text="${article.getQuantity()}"></span></div>
 <!--            <div> Free shipping for orders greater than <b>-->
