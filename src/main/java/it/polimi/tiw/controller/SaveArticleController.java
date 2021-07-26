@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import it.polimi.tiw.utils.Exception400;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -56,11 +57,11 @@ public class SaveArticleController extends GenericServlet {
             sellerId = escapeSQL(req.getParameter(SELLER_ID_FORM_DATA));
             qty = Integer.parseInt(req.getParameter(ARTICLE_QTY_FORM_DATA));
             if (StringUtils.isBlank(articleId) || StringUtils.isBlank(sellerId)) {
-                throw new Exception("Undefined article id or sellerId");
+                throw new Exception400("Undefined article id or sellerId");
             }
 
             if(qty < 1)
-                throw new Exception("Invalid quantity. Quantity must be a positive number");
+                throw new Exception400("Invalid quantity. Quantity must be a positive number");
 
 
         } catch (Exception e) {
@@ -81,7 +82,12 @@ public class SaveArticleController extends GenericServlet {
             log.debug("Articles size --> {}", savedArticles.size());
             req.getSession().setAttribute(CART_SESSION_VAR, savedArticles);
             resp.sendRedirect(getServletContext().getContextPath() + CART_CONTROLLER_PATH);
-        } catch (Exception e) {
+        } catch (Exception400 e) {
+            log.error("Something went wrong when saving article number {}. Cause is {}", articleId, e.getMessage());
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                    "Invalid article or seller identifier");
+        }
+        catch (Exception e) {
             log.error("Something went wrong when saving article number {}. Cause is {}", articleId, e.getMessage());
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     "Something went wrong when trying to add the article to the cart");
@@ -102,19 +108,19 @@ public class SaveArticleController extends GenericServlet {
             savedArticles.get(sellerId).add(article);
     }
 
-    private String getArticlePrice(String articleId, String sellerId) throws SQLException {
+    private String getArticlePrice(String articleId, String sellerId) throws SQLException, Exception400 {
 
         Optional<SellerArticleEntity> sellerArticleEntry = new SellerArticleDAO(connection).findEntry(articleId,
                 sellerId);
         if (sellerArticleEntry.isPresent()) return sellerArticleEntry.get().getPrice();
-        return "";
+        throw new Exception400("Invalid seller or article id");
     }
 
-    private ArticleBean getExistingArticle(String articleId) throws Exception {
+    private ArticleBean getExistingArticle(String articleId) throws Exception400, SQLException {
 
         ArticleDAO articleDAO = new ArticleDAO(connection);
         Optional<ArticleBean> articleBean = articleDAO.findArticleById(articleId);
-        if (!articleBean.isPresent()) throw new Exception("Article not found!");
+        if (!articleBean.isPresent()) throw new Exception400("Article not found!");
         else
             return articleBean.get();
     }
