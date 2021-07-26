@@ -35,16 +35,17 @@
         <td th:text="${order.shipmentDate}"></td>
         <td th:text="${order.shipmentAddr}"></td>
         <!-- <td><a th:href="@{/GetMissionDetails(missionid=${m.id})}">Details</a></td>-->
-        </td>
     </tr>
+    <div th:each="article : ${order.getArticleBeans()}">
     <th>Article Name</th>
     <th>Article Qty</th>
     <th>Article Price</th>
-    <tr th:each="article : ${order.getArticleBeans()}">
+    <tr>
         <td th:text="${article.getName()}"></td>
         <td th:text="${article.getQuantity()}"></td>
         <td><span th:text="${article.getPrice()}"></span><span>&#8364;</span></td>
     </tr>
+    </div>
     </tbody>
     <br><br>
 </table>
